@@ -1,7 +1,8 @@
-import React, {useState} from 'react'
+import React, {useState, Fragment} from 'react'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
+import MyVerticallyCenteredModal from './Modal';
 
 const Login = () => {
 
@@ -9,6 +10,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [modalShow, setModalShow] = useState(false);
 
   const userUrl = 'http://127.0.0.1:8000/api/login'
 
@@ -38,8 +40,6 @@ const Login = () => {
         body: JSON.stringify(options)
       });
 
-      console.log(options);
-
       if(!response.ok) {
         throw new Error('Could not fetch data from ' + url);
       }
@@ -47,6 +47,9 @@ const Login = () => {
       const fetchedData = await response.json();
 
       console.log(fetchedData);
+      setUser({email: options.email});
+      // localStorage.setItem('user', fetchedData);
+      setModalShow(true);
       setPassword('');
       setEmail('');
 
@@ -55,12 +58,19 @@ const Login = () => {
       setError(err.message);
       console.log(error);
     }
-
-
   }
 
 
+
   return (
+
+    <Fragment>
+
+      <MyVerticallyCenteredModal
+              show={modalShow}
+              user={user}
+              onHide={() => setModalShow(false)}
+            />
 
     <Container>
         <Form onSubmit={handleSubmit}>
@@ -84,6 +94,8 @@ const Login = () => {
         </Button>
       </Form>
     </Container>
+
+    </Fragment>
   )
 }
 

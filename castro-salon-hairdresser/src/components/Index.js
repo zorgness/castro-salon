@@ -3,7 +3,7 @@ import Banner from './Banner';
 
 const Index = () => {
 
-  const [info ,setInfo] = useState('');
+  const [info ,setInfo] = useState([]);
 
   useEffect(() => {
 
@@ -12,9 +12,9 @@ const Index = () => {
       checkDataAgeToCleanLocaleStorage (date);
      }
 
-    // getInfo();
+    getInfo();
 
-  });
+  }, [info.length]);
 
 
   const fetchData = async url => {
@@ -70,8 +70,6 @@ const Index = () => {
   }
 
 
-
-
   const title = info?.["hydra:member"]?.[0]?.title;
   const text = info?.["hydra:member"]?.[0]?.text;
 
@@ -84,10 +82,8 @@ const Index = () => {
 
   )
 
-
-
-
   return (
+
     <div>
       <Banner />
       {

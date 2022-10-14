@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import Gallery from './components/Gallery';
 import Contact from './components/Contact';
+import GalleryForm from './components/form/GalleryForm';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/gallerie" element={<Gallery />}/>
             <Route path="/contact" element={<Contact />}/>
             <Route path="/login" element={<Login />}/>
+            <Route path="/gallerie_edit" element={<GalleryForm />}/>
 
         </Routes>
       </BrowserRouter>,
