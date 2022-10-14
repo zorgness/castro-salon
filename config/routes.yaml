@@ -1,6 +1,5 @@
-controllers:
-    resource: ../src/Controller/
-    type: attribute
+# controllers:
+#     resource: ../src/Controller/
+#     type: attribute
 api_login:
-    path: /api/login/sign_in
-    methods: ['POST']
+    path: /api/login

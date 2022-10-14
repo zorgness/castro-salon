@@ -12,9 +12,9 @@ const Index = () => {
       checkDataAgeToCleanLocaleStorage (date);
      }
 
-    getInfo();
+    // getInfo();
 
-  })
+  });
 
 
   const fetchData = async url => {
@@ -57,6 +57,7 @@ const Index = () => {
       const storage = JSON.parse(localStorage.getItem('info'));
 
       setInfo(storage);
+
     } else {
 
       const response = await fetchData('http://127.0.0.1:8000/api/text_intros');
@@ -67,6 +68,8 @@ const Index = () => {
       }
     }
   }
+
+
 
 
   const title = info?.["hydra:member"]?.[0]?.title;

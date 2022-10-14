@@ -10,11 +10,11 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const userUrl = 'http://127.0.0.1:8000/api/login/sign_in'
+  const userUrl = 'http://127.0.0.1:8000/api/login'
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetchData(userUrl, {email: email, password: password});
+    fetchData(userUrl, {email: email, password: password });
   };
 
   const handleEmail = (event) => {
@@ -39,13 +39,12 @@ const Login = () => {
       });
 
       console.log(options);
-      console.log(response);
 
       if(!response.ok) {
         throw new Error('Could not fetch data from ' + url);
       }
 
-      const fetchedData = response.json();
+      const fetchedData = await response.json();
 
       console.log(fetchedData);
       setPassword('');
