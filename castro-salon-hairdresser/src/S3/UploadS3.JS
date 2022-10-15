@@ -3,10 +3,10 @@ import crypto from 'crypto';
 
 
 
-  const region = process.env.AWS_S3_REGION;
-  const bucketName = process.env.AWS_S3_BUCKET_NAME;
-  const publicKey = process.env.AWS_S3_PUBLIC_KEY;
-  const privateKey = process.env.AWS_S3_PRIVATE_KEY;
+  const region = process.env.REACT_APP_AWS_S3_REGION;
+  const bucketName = process.env.REACT_APP_AWS_S3_BUCKET_NAME;
+  const publicKey = process.env.REACT_APP_AWS_S3_PUBLIC_KEY;
+  const privateKey = process.env.REACT_APP_AWS_S3_PRIVATE_KEY;
 
   const s3 = new aws.S3({
 
@@ -26,6 +26,3 @@ import crypto from 'crypto';
     const uploadUrl = await s3.getSignedUrlPromise('putObject', params);
     return uploadUrl;
   }
-
-
-  export default generateUploadUrl;
