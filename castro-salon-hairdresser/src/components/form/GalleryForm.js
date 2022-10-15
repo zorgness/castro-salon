@@ -9,6 +9,7 @@ const GalleryForm = () => {
 
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
+  const [blogPost, setBlogPost] = useState(null);
   const [imageNames, setImageNames] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [success, setSuccess] = useState('');
@@ -43,24 +44,25 @@ const GalleryForm = () => {
     setSelectedFiles(e.target.files);
     setError('');
     setSuccess('');
-}
 
-  const handleSubmit = (e) => {
+ }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if(title !== '' && text !== '') {
       const options = {title: title, text: text};
-      fetchData(urlBlogPosts, options);
+      const fetchedData = await fetchData(urlBlogPosts, options);
 
       for(let i = 0; i < selectedFiles.length; i++) {
-        setImageNames(prevState => {
-         return [...prevState, selectedFiles[i].name]
-       });
-       uploadImage(selectedFiles[i]);
-       fetchData(urlProductImage, {post_id: 8, name: imageNames[i]})
-    }
+
+        uploadImage(selectedFiles[i]);
+        fetchData(urlProductImage, {post: fetchedData['@id'], name: selectedFiles[i].name})
+      };
+      setSuccess('Successfully uploaded ')
     }
   }
+
 
 
 
@@ -81,8 +83,7 @@ const GalleryForm = () => {
 
       const fetchedData = await response.json();
 
-      console.log('response: ',fetchedData);
-      setSuccess('Successfully send');
+      return fetchedData
 
     } catch (err) {
       setError(err.message);
@@ -90,7 +91,7 @@ const GalleryForm = () => {
   };
 
 
-
+  // console.log("afterFecth ",blogPost);
 
 
 
@@ -128,9 +129,9 @@ const GalleryForm = () => {
       return await s3.upload(params).promise()
 
     } catch (e) {
-      console.error(e.message);
-    }
 
+      setError(e.message);
+    }
 
     // try {
     //   const response = await fetch("");
@@ -161,7 +162,7 @@ const GalleryForm = () => {
           <p>{ error }</p>
         </div>
 
-       { success && <div className='text-success text-right'>
+       { success   && <div className='text-success text-right'>
           <p>{ success }<img src={Butterfly} alt="butterfly" className="avatar-small"/></p>
         </div>
       }
