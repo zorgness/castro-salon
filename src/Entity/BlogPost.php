@@ -30,7 +30,7 @@ class BlogPost
     private ?string $text = null;
 
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: ProductImage::class)]
-    // #[Assert\Length(['min' => 2 ,"max"=> 5])]
+    // #[Assert\Count(['min' => 1, 'max' => 5])]
     private Collection $productImages;
 
     public function __construct()

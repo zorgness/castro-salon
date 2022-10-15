@@ -5,16 +5,21 @@ const Index = () => {
 
   const [info ,setInfo] = useState([]);
 
+  const imagePath = process.env.REACT_APP_AWS_S3_URL
+
   useEffect(() => {
 
-    if ( localStorage.getItem('storageDate')) {
-      const date = localStorage.getItem('storageDate');
+    if ( localStorage.getItem('storageDateHome')) {
+      const date = localStorage.getItem('storageDateHome');
       checkDataAgeToCleanLocaleStorage (date);
      }
 
-    getInfo();
+    return () => {
+      getInfo();
+    }
 
-  }, [info.length]);
+
+  }, []);
 
 
   const fetchData = async url => {
@@ -45,7 +50,7 @@ const Index = () => {
 
     if (today - dataDate <= 2) {
       localStorage.clear()
-      localStorage.setItem('storageDate', Date.now());
+      localStorage.setItem('storageDateHome', Date.now());
     }
 
   }
@@ -63,11 +68,13 @@ const Index = () => {
       const response = await fetchData('http://127.0.0.1:8000/api/text_intros');
 
       localStorage.setItem('info', JSON.stringify(response));
-      if ( !localStorage.getItem('storageDate') ) {
-        localStorage.setItem('storageDate', Date.now());
+      if ( !localStorage.getItem('storageDateHome') ) {
+        localStorage.setItem('storageDateHome', Date.now());
       }
     }
   }
+
+  console.log(info)
 
 
   const title = info?.["hydra:member"]?.[0]?.title;

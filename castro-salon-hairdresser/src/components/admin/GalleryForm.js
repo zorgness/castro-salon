@@ -9,8 +9,6 @@ const GalleryForm = () => {
 
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
-  const [blogPost, setBlogPost] = useState(null);
-  const [imageNames, setImageNames] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
@@ -20,13 +18,15 @@ const GalleryForm = () => {
   const accessKeyId= process.env.REACT_APP_AWS_S3_PUBLIC_KEY;
   const secretAccessKey= process.env.REACT_APP_AWS_S3_PRIVATE_KEY;
 
-
   const s3 = new aws.S3({
     bucketName, region, accessKeyId, secretAccessKey, signatureVersion: 'v4'
   });
 
   const urlBlogPosts = 'http://127.0.0.1:8000/api/blog_posts';
   const urlProductImage = 'http://127.0.0.1:8000/api/product_images';
+
+  const uid =  Date.now().toString(36) + Math.random().toString(36).substr(2);
+
 
   const handleTitle = (e) => {
     setTitle(e.target.value);
@@ -49,6 +49,10 @@ const GalleryForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (selectedFiles.length > 5) {
+        setError('5 images maximum')
+        return
+    }
 
     if(title !== '' && text !== '') {
       const options = {title: title, text: text};
@@ -57,13 +61,11 @@ const GalleryForm = () => {
       for(let i = 0; i < selectedFiles.length; i++) {
 
         uploadImage(selectedFiles[i]);
-        fetchData(urlProductImage, {post: fetchedData['@id'], name: selectedFiles[i].name})
+        fetchData(urlProductImage, {post: fetchedData['@id'], name: uid + selectedFiles[i].name})
       };
       setSuccess('Successfully uploaded ')
     }
   }
-
-
 
 
   const fetchData = async (url, options) => {
@@ -91,40 +93,15 @@ const GalleryForm = () => {
   };
 
 
-  // console.log("afterFecth ",blogPost);
-
-
-
-
-    // const generateUploadUrl = async () =>  {
-    // const ranBytes = await crypto.randomBytes(16);
-    // const imageName = ranBytes.toString('hex');
-
-    // const imageName = 'random-image'
-
-    // const params = ({
-    //   Bucket: bucketName,
-    //   Key: imageName,
-    //   Expires: 60
-    // })
-
-    // const uploadUrl = await s3.getSignedUrlPromise('putObject', params);
-    // return uploadUrl;
-  //}
-
-
-
   const uploadImage = async (file) => {
 
     try {
       const params = ({
         Body: file,
         Bucket: bucketName,
-        Key: file.name,
+        Key: uid + file.name,
         Expires: 60
       })
-
-
 
       return await s3.upload(params).promise()
 
@@ -132,22 +109,6 @@ const GalleryForm = () => {
 
       setError(e.message);
     }
-
-    // try {
-    //   const response = await fetch("");
-
-    //   if(!response.ok) {
-    //     throw new Error('Could not fetch data from aws');
-    //   }
-
-    //   const fetchedData = await response.json();
-
-    //   console.log('response: ',fetchedData);
-
-
-    // } catch (err) {
-    //   setError(err.message);
-    // }
   };
 
   return (

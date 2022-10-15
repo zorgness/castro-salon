@@ -10,7 +10,8 @@ import {
 } from "react-router-dom";
 import Gallery from './components/Gallery';
 import Contact from './components/Contact';
-import GalleryForm from './components/form/GalleryForm';
+import GalleryForm from './components/admin/GalleryForm';
+import GalleryIndex from './components/admin/GalleryIndex';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/contact" element={<Contact />}/>
             <Route path="/login" element={<Login />}/>
             <Route path="/gallerie_edit" element={<GalleryForm />}/>
+            <Route path="/gallerie_index" element={<GalleryIndex />}/>
 
         </Routes>
       </BrowserRouter>,
