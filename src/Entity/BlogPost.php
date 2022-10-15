@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
+
+use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\BlogPostRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource()]
 #[ORM\Entity(repositoryClass: BlogPostRepository::class)]
@@ -18,12 +20,17 @@ class BlogPost
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    // #[Assert\NotBlank()]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
+    // #[Assert\NotBlank()]
+    // #[Assert\Length([ 'min' => 10, 'max' => 255])]
+
     private ?string $text = null;
 
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: ProductImage::class)]
+    // #[Assert\Length(['min' => 2 ,"max"=> 5])]
     private Collection $productImages;
 
     public function __construct()
