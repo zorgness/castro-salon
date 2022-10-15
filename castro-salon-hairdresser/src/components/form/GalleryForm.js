@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Butterfly from '../../images/butterfly.png'
 
+
 const GalleryForm = () => {
 
   const [title, setTitle] = useState('');
@@ -28,9 +29,14 @@ const GalleryForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const options = {title: title, text: text};
-    fetchData(urlBlogPosts, options);
+    if(title !== '' && text !== '') {
+      const options = {title: title, text: text};
+      fetchData(urlBlogPosts, options);
+      uploadImage()
+    }
+
   }
+
 
   const fetchData = async (url, options) => {
     try {
@@ -55,6 +61,28 @@ const GalleryForm = () => {
     } catch (err) {
       setError(err.message);
     }
+  };
+
+  const uploadImage = async () => {
+    // const urlBucket = generateUploadUrl()
+
+    // console.log(urlBucket);
+
+    // try {
+    //   const response = await fetch(urlBucket);
+
+    //   if(!response.ok) {
+    //     throw new Error('Could not fetch data from aws');
+    //   }
+
+    //   const fetchedData = await response.json();
+
+    //   console.log('response: ',fetchedData);
+
+
+    // } catch (err) {
+    //   setError(err.message);
+    // }
   };
 
   return (
