@@ -5,8 +5,6 @@ const Index = () => {
 
   const [info ,setInfo] = useState([]);
 
-  const imagePath = process.env.REACT_APP_AWS_S3_URL
-
   useEffect(() => {
 
     if ( localStorage.getItem('storageDateHome')) {

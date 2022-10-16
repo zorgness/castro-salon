@@ -8,18 +8,21 @@ const Gallery = () => {
   const [info ,setInfo] = useState([]);
   const [imageUrl, setImageUrl] = useState([]);
 
+
   useEffect(() => {
 
     if ( localStorage.getItem('storageDateIndex')) {
       const date = localStorage.getItem('storageDateIndex');
       checkDataAgeToCleanLocaleStorage (date);
      }
-return () => {
-  getInfo();
-}
+
+
+    return () => {
+      getInfo();
+
+    }
 
   }, []);
-
 
   const fetchData = async url => {
 
@@ -33,7 +36,7 @@ return () => {
 
       const fetchedData = await response.json();
 
-      setInfo(fetchedData);
+
       return fetchedData;
 
     } catch (err) {
@@ -59,33 +62,54 @@ return () => {
 
       const storage = JSON.parse(localStorage.getItem('infoIndex'));
 
+      const imageStorage = JSON.parse(localStorage.getItem('imageIndex'));
+
       setInfo(storage);
+      // console.log(imageStorage)
+
+      storage["hydra:member"].forEach(element => {
+        const fileName = fetchData('http://localhost:8000' + element.productImages[0]);
+
+        fileName.then(data => {
+          setImageUrl(prevState => [...prevState, data.name])
+
+        })
+
+      })
+
 
     } else {
 
-      const response = await fetchData('http://127.0.0.1:8000/api/blog_posts');
+      const fetchedData = await fetchData('http://127.0.0.1:8000/api/blog_posts');
+      setInfo(fetchedData);
 
-      localStorage.setItem('infoIndex', JSON.stringify(response));
+      const storage = [];
+
+      fetchedData["hydra:member"].forEach(element => {
+          const fileName = fetchData('http://localhost:8000' + element.productImages[0]);
+
+          fileName.then(data => {
+            setImageUrl(prevState => [...prevState, data.name])
+
+
+           storage.push(data);
+           localStorage.setItem('imageIndex', JSON.stringify(storage))
+
+          })
+
+        })
+
+
+
+      localStorage.setItem('infoIndex', JSON.stringify(fetchedData));
+
       if ( !localStorage.getItem('storageDateIndex') ) {
         localStorage.setItem('storageDateIndex', Date.now());
       }
     }
   }
 
-  // const getImagesNames = async () => {
 
-  //   const imagesName = [];
-  //   await info?.['hydra:member']?.map(({productImages}) => {
-  //     const response = fetchData(`http://127.0.0.1:8000${productImages}`)
-  //       imagesName.push(response);
-  //   })
-
-  //   console.log(imagesName);
-
-  // }
-
-
-  console.log(info)
 
   return (
     <Fragment>
@@ -93,15 +117,21 @@ return () => {
       <div>GalleryIndex</div>
 
       {
-        info?.['hydra:member']?.map(({id, title })=> {
+        info?.['hydra:member']?.map(({id, title} , index )=> {
+
+
+
+
           return (
             <Fragment key={id}>
 
-              <div>
-                <p>{title}</p>
-                <p>{}</p>
-
+              <div className='m-3'>
+                <h2 className='border border-success rounded w-25'>{title}</h2>
+                <p>{id}</p>
+                {imageUrl[index] !== undefined && <img src={imagePath + imageUrl[index]} alt={imageUrl[index]} className="avatar-large" />}
               </div>
+
+
 
             </Fragment>
             )

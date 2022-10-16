@@ -29,7 +29,7 @@ function App() {
             <Route path="/gallerie_index" element={<GalleryIndex />}/>
 
         </Routes>
-      </BrowserRouter>,
+      </BrowserRouter>
 
     </div>
   );
