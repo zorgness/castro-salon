@@ -7,7 +7,7 @@ use App\Repository\ProductImageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductImageRepository::class)]
-#[ApiResource()]
+#[ApiResource(order: ["created_at" => 'ASC'] )]
 class ProductImage
 {
     #[ORM\Id]
@@ -20,6 +20,14 @@ class ProductImage
 
     #[ORM\ManyToOne(inversedBy: 'productImages')]
     private ?BlogPost $post = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $created_at = null;
+
+    public function __construct()
+    {
+      $this->setCreatedAt(new \DateTimeImmutable);
+    }
 
     public function getId(): ?int
     {
@@ -46,6 +54,18 @@ class ProductImage
     public function setPost(?BlogPost $post): self
     {
         $this->post = $post;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(?\DateTimeImmutable $created_at): self
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }
