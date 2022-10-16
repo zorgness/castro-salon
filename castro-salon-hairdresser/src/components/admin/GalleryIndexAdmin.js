@@ -1,6 +1,6 @@
 import React from 'react'
 
-const GalleryIndex = () => {
+const GalleryIndexAdmin = () => {
 
   return (
 
@@ -9,4 +9,4 @@ const GalleryIndex = () => {
   )
 }
 
-export default GalleryIndex
+export default GalleryIndexAdmin

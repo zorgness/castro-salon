@@ -72,8 +72,7 @@ const Index = () => {
     }
   }
 
-  console.log(info)
-
+  // console.log(info)
 
   const title = info?.["hydra:member"]?.[0]?.title;
   const text = info?.["hydra:member"]?.[0]?.text;

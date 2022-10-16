@@ -9,24 +9,27 @@ import {
   Route,
 } from "react-router-dom";
 import Gallery from './components/Gallery';
+import GalleryShow from './components/GalleryShow';
 import Contact from './components/Contact';
 import GalleryForm from './components/admin/GalleryForm';
-import GalleryIndex from './components/admin/GalleryIndex';
+import GalleryIndexAdmin from './components/admin/GalleryIndexAdmin';
 
 function App() {
   return (
     <div className="App">
+
       <Navigation />
 
       <BrowserRouter>
-        <Routes>
 
+        <Routes>
             <Route path="/" element={<Index />}/>
             <Route path="/gallerie" element={<Gallery />}/>
+            <Route path="/gallerie/:id" element={<GalleryShow />}/>
             <Route path="/contact" element={<Contact />}/>
             <Route path="/login" element={<Login />}/>
             <Route path="/gallerie_edit" element={<GalleryForm />}/>
-            <Route path="/gallerie_index" element={<GalleryIndex />}/>
+            <Route path="/gallerie_index" element={<GalleryIndexAdmin />}/>
 
         </Routes>
       </BrowserRouter>

@@ -1,5 +1,7 @@
 import React, {useState, useEffect, Fragment} from 'react'
+import { Link } from "react-router-dom";
 import Banner from './Banner';
+import { fetchData } from '../Api/FecthData';
 
 const Gallery = () => {
 
@@ -11,7 +13,7 @@ const Gallery = () => {
 
   useEffect(() => {
 
-    if ( localStorage.getItem('storageDateIndex')) {
+    if (localStorage.getItem('storageDateIndex')) {
       const date = localStorage.getItem('storageDateIndex');
       checkDataAgeToCleanLocaleStorage (date);
      }
@@ -24,82 +26,69 @@ const Gallery = () => {
 
   }, []);
 
-  const fetchData = async url => {
+  // const fetchData = async url => {
 
-    try {
+  //   try {
 
-      const response = await fetch(url);
+  //     const response = await fetch(url);
 
-      if(!response.ok) {
-        throw new Error();
-      }
+  //     if(!response.ok) {
+  //       throw new Error();
+  //     }
 
-      const fetchedData = await response.json();
+  //     const fetchedData = await response.json();
 
+  //     return fetchedData;
 
-      return fetchedData;
+  //   } catch (err) {
 
-    } catch (err) {
-
-      console.log(err.message);
-    }
-  }
+  //     console.log(err.message);
+  //   }
+  // }
 
   const checkDataAgeToCleanLocaleStorage = date => {
     const today = new Date(Date.now()).getDate();
     const dataDate = new Date(parseInt(date)).getDate()
 
-    if (today - dataDate <= 2) {
+    if (today - dataDate >= 2) {
       localStorage.clear()
       localStorage.setItem('storageDateIndex', Date.now());
     }
 
   }
 
+  const isLocaleStorage = localStorage.hasOwnProperty('infoIndex')
+  // to slow if is inside function getInfo
   const getInfo = async () => {
 
-    if (localStorage.getItem('infoIndex')) {
+    if (isLocaleStorage) {
 
+      console.log('storage')
       const storage = JSON.parse(localStorage.getItem('infoIndex'));
 
       const imageStorage = JSON.parse(localStorage.getItem('imageIndex'));
 
       setInfo(storage);
-      // console.log(imageStorage)
-
-      storage["hydra:member"].forEach(element => {
-        const fileName = fetchData('http://localhost:8000' + element.productImages[0]);
-
-        fileName.then(data => {
-          setImageUrl(prevState => [...prevState, data.name])
-
-        })
-
-      })
-
+      setImageUrl(imageStorage);
 
     } else {
 
       const fetchedData = await fetchData('http://127.0.0.1:8000/api/blog_posts');
       setInfo(fetchedData);
 
-      const storage = [];
+      const imageStorage = [];
 
-      fetchedData["hydra:member"].forEach(element => {
+      fetchedData["hydra:member"]?.forEach(element => {
           const fileName = fetchData('http://localhost:8000' + element.productImages[0]);
 
           fileName.then(data => {
-            setImageUrl(prevState => [...prevState, data.name])
 
+           setImageUrl(prevState => [...prevState, data])
 
-           storage.push(data);
-           localStorage.setItem('imageIndex', JSON.stringify(storage))
-
+           imageStorage.push(data);
+           localStorage.setItem('imageIndex', JSON.stringify(imageStorage))
           })
-
         })
-
-
 
       localStorage.setItem('infoIndex', JSON.stringify(fetchedData));
 
@@ -107,8 +96,11 @@ const Gallery = () => {
         localStorage.setItem('storageDateIndex', Date.now());
       }
     }
+
   }
 
+
+  const sortImages = imageUrl?.sort((a,b)=> parseInt(a.post.replace(/[^0-9]/g, "")) - parseInt(b.post.replace(/[^0-9]/g, "")));
 
 
   return (
@@ -116,24 +108,23 @@ const Gallery = () => {
       <Banner />
       <div>GalleryIndex</div>
 
+
       {
         info?.['hydra:member']?.map(({id, title} , index )=> {
 
 
-
-
           return (
-            <Fragment key={id}>
+            <Link to={`/gallerie/${id}`} key={id} >
+              <Fragment >
 
-              <div className='m-3'>
-                <h2 className='border border-success rounded w-25'>{title}</h2>
-                <p>{id}</p>
-                {imageUrl[index] !== undefined && <img src={imagePath + imageUrl[index]} alt={imageUrl[index]} className="avatar-large" />}
-              </div>
+                <div className='m-3'>
+                  <h2 className='border border-success rounded w-25'>{title}</h2>
+                  <p>{id}</p>
+                  {sortImages[index] !== undefined && <img src={imagePath + sortImages[index]?.name} alt={sortImages[index]?.name} className="avatar-large" />}
+                </div>
 
-
-
-            </Fragment>
+              </Fragment>
+            </Link>
             )
           })
       }

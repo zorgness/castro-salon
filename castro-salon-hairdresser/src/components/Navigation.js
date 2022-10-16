@@ -1,6 +1,7 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import Hamburger from '../images/hamburger.png'
 
 
 
@@ -13,7 +14,7 @@ function Navigation() {
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMuUIFk0w4Agm7EVuAws8T1CIQMvVqUxJo7A&usqp=CAU" alt="logo" className='avatar '/>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav">
-            <img src="./hamburger.png" alt="logo" className="avatar-small" />
+            <img src={Hamburger} alt="hamburger-nav" className="avatar-small" />
           </Navbar.Toggle>
           </Container>
 
