@@ -1,5 +1,7 @@
 import React, {useState, useEffect, Fragment} from 'react'
 import Banner from './Banner';
+import { fetchData } from '../Api/FecthData';
+import { checkDataAgeToCleanLocaleStorage } from '../cleanStorage/CleanStorage'
 
 const Index = () => {
 
@@ -7,54 +9,22 @@ const Index = () => {
 
   useEffect(() => {
 
-    if ( localStorage.getItem('storageDateHome')) {
+    if (localStorage.getItem('storageDateHome')) {
       const date = localStorage.getItem('storageDateHome');
-      checkDataAgeToCleanLocaleStorage (date);
+      checkDataAgeToCleanLocaleStorage(date);
      }
 
     return () => {
       getInfo();
     }
 
-
   }, []);
 
 
-  const fetchData = async url => {
-
-    try {
-
-      const response = await fetch(url);
-
-      if(!response.ok) {
-        throw new Error();
-      }
-
-      const fetchedData = await response.json();
-
-      setInfo(fetchedData);
-
-      return fetchedData;
-
-    } catch (err) {
-
-      console.log(err.message);
-    }
-  }
-
-  const checkDataAgeToCleanLocaleStorage = date => {
-    const today = new Date(Date.now()).getDate();
-    const dataDate = new Date(parseInt(date)).getDate()
-
-    if (today - dataDate <= 2) {
-      localStorage.clear()
-      localStorage.setItem('storageDateHome', Date.now());
-    }
-
-  }
 
   const getInfo = async () => {
 
+    console.log('storage index')
     if (localStorage.getItem('info')) {
 
       const storage = JSON.parse(localStorage.getItem('info'));
@@ -63,9 +33,11 @@ const Index = () => {
 
     } else {
 
-      const response = await fetchData('http://127.0.0.1:8000/api/text_intros');
+      const fetchedData = await fetchData('http://127.0.0.1:8000/api/text_intros');
 
-      localStorage.setItem('info', JSON.stringify(response));
+      setInfo(fetchedData);
+
+      localStorage.setItem('info', JSON.stringify(fetchedData));
       if ( !localStorage.getItem('storageDateHome') ) {
         localStorage.setItem('storageDateHome', Date.now());
       }
@@ -90,9 +62,9 @@ const Index = () => {
 
     <div>
       <Banner />
-      {
-        displayInfo
-      }
+        {
+          displayInfo
+        }
     </div>
   )
 }

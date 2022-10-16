@@ -11,8 +11,9 @@ import {
 import Gallery from './components/Gallery';
 import GalleryShow from './components/GalleryShow';
 import Contact from './components/Contact';
-import GalleryForm from './components/admin/GalleryForm';
+import GalleryNewAdmin from './components/admin/GalleryNewAdmin';
 import GalleryIndexAdmin from './components/admin/GalleryIndexAdmin';
+import GalleryEditAdmin from './components/admin/GalleryEditAdmin';
 
 function App() {
   return (
@@ -28,8 +29,9 @@ function App() {
             <Route path="/gallerie/:id" element={<GalleryShow />}/>
             <Route path="/contact" element={<Contact />}/>
             <Route path="/login" element={<Login />}/>
-            <Route path="/gallerie_edit" element={<GalleryForm />}/>
-            <Route path="/gallerie_index" element={<GalleryIndexAdmin />}/>
+            <Route path="/admin_gallery_new" element={<GalleryNewAdmin />}/>
+            <Route path="/admin_gallery_index" element={<GalleryIndexAdmin />}/>
+            <Route path="/admin_gallery_edit/:id" element={<GalleryEditAdmin />}/>
 
         </Routes>
       </BrowserRouter>

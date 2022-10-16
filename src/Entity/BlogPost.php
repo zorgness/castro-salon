@@ -23,10 +23,9 @@ class BlogPost
     // #[Assert\NotBlank()]
     private ?string $title = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length:5000)]
     // #[Assert\NotBlank()]
     // #[Assert\Length([ 'min' => 10, 'max' => 255])]
-
     private ?string $text = null;
 
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: ProductImage::class)]

@@ -3,9 +3,10 @@ import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Butterfly from '../../images/butterfly.png'
-import aws from 'aws-sdk';
+import { fetchDataWithMethod } from '../../Api/FetchDataWithMethod'
+import { s3, bucketName, uid} from '../../../src/S3/S3'
 
-const GalleryForm = () => {
+const GalleryNewAdmin = () => {
 
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
@@ -13,19 +14,8 @@ const GalleryForm = () => {
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
 
-  const region = process.env.REACT_APP_AWS_S3_REGION;
-  const bucketName = process.env.REACT_APP_AWS_S3_BUCKET_NAME;
-  const accessKeyId= process.env.REACT_APP_AWS_S3_PUBLIC_KEY;
-  const secretAccessKey= process.env.REACT_APP_AWS_S3_PRIVATE_KEY;
-
-  const s3 = new aws.S3({
-    bucketName, region, accessKeyId, secretAccessKey, signatureVersion: 'v4'
-  });
-
   const urlBlogPosts = 'http://127.0.0.1:8000/api/blog_posts';
   const urlProductImage = 'http://127.0.0.1:8000/api/product_images';
-
-  const uid =  Date.now().toString(36) + Math.random().toString(36).substr(2);
 
 
   const handleTitle = (e) => {
@@ -56,41 +46,20 @@ const GalleryForm = () => {
 
     if(title !== '' && text !== '') {
       const options = {title: title, text: text};
-      const fetchedData = await fetchData(urlBlogPosts, options);
+      const fetchedData = await fetchDataWithMethod(urlBlogPosts, 'POST', options);
 
       for(let i = 0; i < selectedFiles.length; i++) {
 
         uploadImage(selectedFiles[i]);
-        fetchData(urlProductImage, {post: fetchedData['@id'], name: uid + selectedFiles[i].name})
+        fetchDataWithMethod(urlProductImage, 'POST', {post: fetchedData['@id'], name: uid + selectedFiles[i].name})
       };
       setSuccess('Successfully uploaded ')
+      localStorage.clear()
     }
   }
 
 
-  const fetchData = async (url, options) => {
-    try {
 
-      const response = await fetch(url, {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(options)
-      });
-
-      if(!response.ok) {
-        throw new Error('Could not fetch data from ' + url);
-      }
-
-      const fetchedData = await response.json();
-
-      return fetchedData
-
-    } catch (err) {
-      setError(err.message);
-    }
-  };
 
 
   const uploadImage = async (file) => {
@@ -131,7 +100,7 @@ const GalleryForm = () => {
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>Titre</Form.Label>
-            <Form.Control type="text" placeholder="titre" onChange={handleTitle} />
+            <Form.Control type="text" placeholder="titre" id="" onChange={handleTitle} />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
@@ -155,4 +124,4 @@ const GalleryForm = () => {
   )
 }
 
-export default GalleryForm
+export default GalleryNewAdmin

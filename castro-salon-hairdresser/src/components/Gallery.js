@@ -2,13 +2,14 @@ import React, {useState, useEffect, Fragment} from 'react'
 import { Link } from "react-router-dom";
 import Banner from './Banner';
 import { fetchData } from '../Api/FecthData';
+import { checkDataAgeToCleanLocaleStorage } from '../cleanStorage/CleanStorage'
 
 const Gallery = () => {
 
   const imagePath = process.env.REACT_APP_AWS_S3_URL;
 
-  const [info ,setInfo] = useState([]);
-  const [imageUrl, setImageUrl] = useState([]);
+  const [infos ,setInfos] = useState([]);
+  const [nameImages, setNameImages] = useState([]);
 
 
   useEffect(() => {
@@ -18,79 +19,47 @@ const Gallery = () => {
       checkDataAgeToCleanLocaleStorage (date);
      }
 
-
     return () => {
-      getInfo();
+      getInfos();
 
     }
-
   }, []);
 
-  // const fetchData = async url => {
 
-  //   try {
+  // to slow  if is inside function getInfo
+  const isInLocaleStorage = localStorage.hasOwnProperty('infoStorageGallery')
 
-  //     const response = await fetch(url);
+  const getInfos = async () => {
 
-  //     if(!response.ok) {
-  //       throw new Error();
-  //     }
+    if (isInLocaleStorage) {
 
-  //     const fetchedData = await response.json();
+      console.log('storage gallery')
 
-  //     return fetchedData;
+      const infoStorage = JSON.parse(localStorage.getItem('infoStorageGallery'));
+      const imageStorage = JSON.parse(localStorage.getItem('imageStorageGallery'));
 
-  //   } catch (err) {
-
-  //     console.log(err.message);
-  //   }
-  // }
-
-  const checkDataAgeToCleanLocaleStorage = date => {
-    const today = new Date(Date.now()).getDate();
-    const dataDate = new Date(parseInt(date)).getDate()
-
-    if (today - dataDate >= 2) {
-      localStorage.clear()
-      localStorage.setItem('storageDateIndex', Date.now());
-    }
-
-  }
-
-  const isLocaleStorage = localStorage.hasOwnProperty('infoIndex')
-  // to slow if is inside function getInfo
-  const getInfo = async () => {
-
-    if (isLocaleStorage) {
-
-      console.log('storage')
-      const storage = JSON.parse(localStorage.getItem('infoIndex'));
-
-      const imageStorage = JSON.parse(localStorage.getItem('imageIndex'));
-
-      setInfo(storage);
-      setImageUrl(imageStorage);
+      setInfos(infoStorage);
+      setNameImages(imageStorage);
 
     } else {
 
       const fetchedData = await fetchData('http://127.0.0.1:8000/api/blog_posts');
-      setInfo(fetchedData);
+      setInfos(fetchedData);
 
-      const imageStorage = [];
+      const tmpImageStorage = [];
 
       fetchedData["hydra:member"]?.forEach(element => {
-          const fileName = fetchData('http://localhost:8000' + element.productImages[0]);
 
-          fileName.then(data => {
+          const filesName = fetchData('http://localhost:8000' + element.productImages[0]);
 
-           setImageUrl(prevState => [...prevState, data])
-
-           imageStorage.push(data);
-           localStorage.setItem('imageIndex', JSON.stringify(imageStorage))
+          filesName.then(data => {
+            setNameImages(prevState => [...prevState, data])
+            tmpImageStorage.push(data);
+            localStorage.setItem('imageStorageGallery', JSON.stringify(tmpImageStorage))
           })
         })
 
-      localStorage.setItem('infoIndex', JSON.stringify(fetchedData));
+      localStorage.setItem('infoStorageGallery', JSON.stringify(fetchedData));
 
       if ( !localStorage.getItem('storageDateIndex') ) {
         localStorage.setItem('storageDateIndex', Date.now());
@@ -99,35 +68,34 @@ const Gallery = () => {
 
   }
 
-
-  const sortImages = imageUrl?.sort((a,b)=> parseInt(a.post.replace(/[^0-9]/g, "")) - parseInt(b.post.replace(/[^0-9]/g, "")));
+  // to sort images by post id
+  const sortedImages = nameImages?.sort((a,b)=> parseInt(a.post.replace(/[^0-9]/g, "")) - parseInt(b.post.replace(/[^0-9]/g, "")));
 
 
   return (
     <Fragment>
+
       <Banner />
-      <div>GalleryIndex</div>
+        <div>GalleryIndex</div>
 
+        {
 
-      {
-        info?.['hydra:member']?.map(({id, title} , index )=> {
+        infos?.['hydra:member']?.map(({id, title} , index )=> {
 
-
-          return (
+           return (
             <Link to={`/gallerie/${id}`} key={id} >
               <Fragment >
 
                 <div className='m-3'>
                   <h2 className='border border-success rounded w-25'>{title}</h2>
-                  <p>{id}</p>
-                  {sortImages[index] !== undefined && <img src={imagePath + sortImages[index]?.name} alt={sortImages[index]?.name} className="avatar-large" />}
+                  {sortedImages[index] !== undefined && <img src={imagePath + sortedImages[index]?.name} alt={sortedImages[index]?.name} className="avatar-large" />}
                 </div>
 
               </Fragment>
             </Link>
             )
           })
-      }
+        }
 
     </Fragment>
 
