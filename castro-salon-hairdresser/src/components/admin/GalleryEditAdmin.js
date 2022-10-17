@@ -23,7 +23,8 @@ const GalleryEditAdmin = () => {
   const [error, setError] = useState('');
 
   const urlBlogPosts = `http://127.0.0.1:8000/api/blog_posts/${params.id}`;
-  const urlProductImage = 'http://127.0.0.1:8000/api/product_images/';
+  const urlMain= 'http://127.0.0.1:8000';
+  const urlProductImage = 'http://127.0.0.1:8000/api/product_images';
 
 
   useEffect(() => {
@@ -39,10 +40,11 @@ const GalleryEditAdmin = () => {
 
   }, []);
 
-  const {title, text} = infos;
-  // to slow  if is inside function getInfo
-  const isInLocaleStorage = localStorage.hasOwnProperty(`infoStorageGallery${params.id}`)
 
+  const {title, text} = infos;
+
+  // to slow if is inside function getInfo
+  const isInLocaleStorage = localStorage.hasOwnProperty(`infoStorageGallery${params.id}`)
   const getInfos = async () => {
 
     if (isInLocaleStorage) {
@@ -57,14 +59,14 @@ const GalleryEditAdmin = () => {
 
     } else {
 
-      const fetchedData = await fetchData(`http://127.0.0.1:8000/api/blog_posts/${params.id}`);
+      const fetchedData = await fetchData(urlBlogPosts);
       setInfos(fetchedData);
 
       const tmpImageStorage = [];
 
       fetchedData?.productImages?.forEach(element => {
 
-          const filesName = fetchData('http://localhost:8000' + element);
+          const filesName = fetchData( urlMain + element);
 
           filesName.then(data => {
             setNameImages(prevState => [...prevState, data])
@@ -112,13 +114,23 @@ const GalleryEditAdmin = () => {
     const fetchedData = await fetchDataWithMethod(urlBlogPosts, 'PUT', options);
     console.log(fetchedData)
 
-    for(let i = 0; i < selectedFiles.length; i++) {
+    // if same number of images to upload
+    for(let i = 0; i < infos.productImages.length; i++) {
+      const options = {post: infos['@id'], name: uid + selectedFiles[i].name};
+      uploadImage(selectedFiles[i]);
+      const fectchedData = await fetchDataWithMethod( urlMain + infos.productImages[i], 'PUT', options )
+      console.log(fectchedData)
+    }
 
-      console.log(infos.productImages[i]);
+    // if more images to upload
+    for(let j = infos.productImages.length; j < (selectedFiles.length - infos.productImages.length); j++) {
+        const options = {post: infos['@id'], name: uid + selectedFiles[j].name}
+        uploadImage(selectedFiles[j]);
+        const fetchedData = await fetchDataWithMethod(urlProductImage, 'POST', options )
+        console.log(fetchedData)
 
-      // uploadImage(selectedFiles[i]);
-      // fetchDataWithMethod(urlProductImage + infos.productImages[i], 'PUT', {post: infos['@id'], name: uid + selectedFiles[i].name})
-    };
+      }
+
     // setSuccess('Successfully uploaded ')
     localStorage.clear()
   }

@@ -59,9 +59,6 @@ const GalleryNewAdmin = () => {
   }
 
 
-
-
-
   const uploadImage = async (file) => {
 
     try {
@@ -85,7 +82,7 @@ const GalleryNewAdmin = () => {
      <Fragment>
 
         <div className='m-3'>
-          <h1>Galleries Edition</h1>
+          <h1>Gallery New</h1>
         </div>
 
         <div className='text-danger text-right'>

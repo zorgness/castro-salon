@@ -22,7 +22,6 @@ function App() {
       <Navigation />
 
       <BrowserRouter>
-
         <Routes>
             <Route path="/" element={<Index />}/>
             <Route path="/gallerie" element={<Gallery />}/>
@@ -32,7 +31,6 @@ function App() {
             <Route path="/admin_gallery_new" element={<GalleryNewAdmin />}/>
             <Route path="/admin_gallery_index" element={<GalleryIndexAdmin />}/>
             <Route path="/admin_gallery_edit/:id" element={<GalleryEditAdmin />}/>
-
         </Routes>
       </BrowserRouter>
 
