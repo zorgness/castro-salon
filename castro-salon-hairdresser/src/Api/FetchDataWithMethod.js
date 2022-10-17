@@ -1,4 +1,6 @@
 export const fetchDataWithMethod = async (url, method, options) => {
+
+
   try {
 
     const response = await fetch(url, {
@@ -13,9 +15,13 @@ export const fetchDataWithMethod = async (url, method, options) => {
       throw new Error('Could not fetch data from ' + url);
     }
 
-    const fetchedData = await response.json();
+    if( method !== 'DELETE') {
+      const fetchedData = await response.json();
 
-    return fetchedData
+      return fetchedData
+
+    }
+
 
   } catch (err) {
     console.error(err.message);

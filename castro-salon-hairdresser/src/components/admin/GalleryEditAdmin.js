@@ -21,6 +21,7 @@ const GalleryEditAdmin = () => {
   const [textEdit, setTextEdit] = useState('');
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [success, setSuccess] = useState('');
+  const [load, setLoad] = useState(true);
   const [error, setError] = useState('');
 
   const urlBlogPosts = `http://127.0.0.1:8000/api/blog_posts/${params.id}`;
@@ -35,56 +36,58 @@ const GalleryEditAdmin = () => {
       checkDataAgeToCleanLocaleStorage (date);
      }
 
-    return () => {
-      getInfos();
+     const isInLocaleStorage = localStorage.hasOwnProperty(`infoStorageGallery${params.id}`)
+     const getInfos = async () => {
+
+       if (isInLocaleStorage) {
+
+         console.log(`storage gallery ${params.id}`)
+
+         const infoStorage = JSON.parse(localStorage.getItem(`infoStorageGallery${params.id}`));
+         const imageStorage = JSON.parse(localStorage.getItem(`imageStorageGallery${params.id}`));
+
+         setInfos(infoStorage);
+         setNameImages(imageStorage);
+
+       } else {
+
+         const fetchedData = await fetchData(urlBlogPosts);
+         setInfos(fetchedData);
+
+         const tmpImageStorage = [];
+
+         fetchedData?.productImages?.forEach(element => {
+
+             const filesName = fetchData( urlMain + element);
+
+             filesName.then(data => {
+               setNameImages(prevState => [...prevState, data])
+               tmpImageStorage.push(data);
+               localStorage.setItem(`imageStorageGallery${params.id}`, JSON.stringify(tmpImageStorage))
+             })
+           })
+
+         localStorage.setItem(`infoStorageGallery${params.id}`, JSON.stringify(fetchedData));
+
+         if (!localStorage.getItem('storageDateIndex') ) {
+           localStorage.setItem('storageDateIndex', Date.now());
+         }
+       }
+
+     }
+
+    if(load) {
+      return () => {
+        getInfos();
+        setLoad(false)
+      }
+
     }
 
-  }, []);
 
-  console.log(infos)
+  }, [load, infos, params.id, urlBlogPosts, urlMain ]);
 
   const {title, text} = infos;
-
-  // to slow if is inside function getInfo
-  const isInLocaleStorage = localStorage.hasOwnProperty(`infoStorageGallery${params.id}`)
-  const getInfos = async () => {
-
-    if (isInLocaleStorage) {
-
-      console.log(`storage gallery ${params.id}`)
-
-      const infoStorage = JSON.parse(localStorage.getItem(`infoStorageGallery${params.id}`));
-      const imageStorage = JSON.parse(localStorage.getItem(`imageStorageGallery${params.id}`));
-
-      setInfos(infoStorage);
-      setNameImages(imageStorage);
-
-    } else {
-
-      const fetchedData = await fetchData(urlBlogPosts);
-      setInfos(fetchedData);
-
-      const tmpImageStorage = [];
-
-      fetchedData?.productImages?.forEach(element => {
-
-          const filesName = fetchData( urlMain + element);
-
-          filesName.then(data => {
-            setNameImages(prevState => [...prevState, data])
-            tmpImageStorage.push(data);
-            localStorage.setItem(`imageStorageGallery${params.id}`, JSON.stringify(tmpImageStorage))
-          })
-        })
-
-      localStorage.setItem(`infoStorageGallery${params.id}`, JSON.stringify(fetchedData));
-
-      if (!localStorage.getItem('storageDateIndex') ) {
-        localStorage.setItem('storageDateIndex', Date.now());
-      }
-    }
-
-  }
 
   const handleTitle = (e) => {
     setTitleEdit(e.target.value);
@@ -116,6 +119,10 @@ const GalleryEditAdmin = () => {
     const fetchedData = await fetchDataWithMethod(urlBlogPosts, 'PUT', options);
     console.log(fetchedData)
 
+    if (selectedFiles.length < infos.productImages.length) {
+      setError('not enough file')
+    }
+
     // if same number of images to upload
     for(let i = 0; i < infos.productImages.length; i++) {
       const options = {post: infos['@id'], name: uid + selectedFiles[i].name};
@@ -135,9 +142,7 @@ const GalleryEditAdmin = () => {
       }
     }
 
-    if (selectedFiles.length < infos.productImages.length) {
-      console.log('not enough file')
-    }
+
 
 
 

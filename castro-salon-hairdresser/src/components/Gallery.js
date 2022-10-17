@@ -10,6 +10,7 @@ const Gallery = () => {
 
   const [infos ,setInfos] = useState([]);
   const [nameImages, setNameImages] = useState([]);
+  const [load, setLoad] = useState(true);
 
 
   useEffect(() => {
@@ -19,14 +20,7 @@ const Gallery = () => {
       checkDataAgeToCleanLocaleStorage (date);
      }
 
-    return () => {
-      getInfos();
-
-    }
-  }, []);
-
-
-  // to slow  if is inside function getInfo
+     // to slow  if is inside function getInfo
   const isInLocaleStorage = localStorage.hasOwnProperty('infoStorageGallery')
 
   const getInfos = async () => {
@@ -67,6 +61,19 @@ const Gallery = () => {
     }
 
   }
+
+    if(load) {
+
+      return () => {
+        getInfos();
+        setLoad(false)
+      }
+
+    }
+
+  }, [infos, load]);
+
+
 
   // to sort images by post id
   const sortedImages = nameImages?.sort((a,b)=> parseInt(a.post.replace(/[^0-9]/g, "")) - parseInt(b.post.replace(/[^0-9]/g, "")));

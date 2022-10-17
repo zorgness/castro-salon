@@ -12,7 +12,10 @@ const GalleryIndexAdmin = () => {
   const [infos ,setInfos] = useState([]);
   const [nameImages, setNameImages] = useState([]);
   const [show, setShow] = useState(false);
+  const [load, setLoad] = useState(true);
   const [idBlogPost, setIdBlogPost] = useState(null);
+
+
 
     useEffect(() => {
 
@@ -21,16 +24,9 @@ const GalleryIndexAdmin = () => {
       checkDataAgeToCleanLocaleStorage (date);
      }
 
-      return () => {
-        getInfos();
-      }
-
-  }, []);
-
-  // to slow  if is inside function getInfo
-  const isInLocaleStorage = localStorage.hasOwnProperty('infoStorageGallery')
-
   const getInfos = async () => {
+
+    const isInLocaleStorage = localStorage.hasOwnProperty('infoStorageGallery')
 
     if (isInLocaleStorage) {
 
@@ -68,6 +64,14 @@ const GalleryIndexAdmin = () => {
     }
   }
 
+  if(load) {
+    return () => {
+      getInfos()
+      setLoad(false)
+    }
+  }
+  }, [load, infos]);
+
   // to sort images by post id
   const sortedImages = nameImages?.sort((a,b)=> parseInt(a?.post.replace(/[^0-9]/g, "")) - parseInt(b?.post.replace(/[^0-9]/g, "")));
 
@@ -79,11 +83,13 @@ const GalleryIndexAdmin = () => {
   }
 
   const handleDelete = (id) => {
-    localStorage.clear()
+    setLoad(true)
     galleryDestroy(id);
     handleClose();
-
+    setInfos(Object.entries(infos).filter(member => member.id !== id))
+    localStorage.clear()
   }
+
 
 
 

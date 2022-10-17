@@ -11,6 +11,7 @@ const GalleryShow = () => {
 
   const [infos ,setInfos] = useState([]);
   const [nameImages, setNameImages] = useState([]);
+  const [load, setLoad] = useState(true);
 
 
   useEffect(() => {
@@ -20,17 +21,9 @@ const GalleryShow = () => {
       checkDataAgeToCleanLocaleStorage (date);
      }
 
-    return () => {
-      getInfos();
-
-    }
-  }, []);
-
-
-  // to slow  if is inside function getInfo
-  const isInLocaleStorage = localStorage.hasOwnProperty(`infoStorageGallery${params.id}`)
-
   const getInfos = async () => {
+
+    const isInLocaleStorage = localStorage.hasOwnProperty(`infoStorageGallery${params.id}`)
 
     if (isInLocaleStorage) {
 
@@ -67,6 +60,18 @@ const GalleryShow = () => {
       }
     }
   }
+
+    if(load) {
+
+      return () => {
+        getInfos();
+        setLoad(false)
+      }
+    }
+
+  }, [infos, load, params.id]);
+
+
 
   const {title, text} = infos;
 
