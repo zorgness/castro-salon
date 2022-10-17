@@ -1,0 +1,65 @@
+import { Storage } from 'aws-amplify';
+...
+async pushImgToS3(uri, filename) {
+ if (uri === null) return
+ await Storage.put(filename, uri, {
+     level: 'protected',
+     contentType: 'image/*'
+ })
+     .then(result => console.log(result.key))
+     .catch(err => console.log(err));
+}
+...
+
+import uuid from 'uuid/v4';
+...
+constructor() {
+ super()
+ this.handleAdd = this.handleAdd.bind(this)
+}
+handleAdd = async (event) => {
+ event.persist();
+ // Check there is some files to upload
+ if (!event || !event.target || !event.target.files) return
+const filesLength = event.target.files.length;
+ // Loop through all selected files 
+ for (let i = 0; i < filesLength; i++) {
+  const file = event.target.files[i];
+  const filename = file.name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+  const fileExtension = file.name.split('.').pop();
+  // Define the image name
+  let mainImgName = filename + '-' + uuid() + '.' + fileExtension;
+  // Push the image to S3
+  await this.pushImgToS3(file, mainImgName)
+ }
+}
+
+readFileAsync(file) {
+ return new Promise((resolve, reject) => {
+  let reader = new FileReader();
+  reader.onload = () => {
+   resolve(reader.result);
+  };
+  reader.onerror = reject;
+  reader.readAsDataURL(file);
+ })
+}
+loadImgAsync(imgSrc) {
+ return new Promise((resolve, reject) => {
+  let img = new Image();
+  img.onload = () => {
+   resolve(img);
+  };
+  img.onerror = reject;
+  img.src = imgSrc;
+ })
+}
+imgToBlobAsync(img, canvas) {
+ return new Promise((resolve, reject) => {
+  const ctxMain = canvas.getContext('2d');
+  ctxMain.drawImage(img, 0, 0, canvas.width, canvas.height);
+  ctxMain.canvas.toBlob(async (blob) => {
+   resolve(blob)
+  }, 'image/*');
+ })
+}

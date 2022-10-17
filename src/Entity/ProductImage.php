@@ -19,6 +19,7 @@ class ProductImage
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'productImages')]
+    #[ORM\JoinColumn(onDelete: "CASCADE")]
     private ?BlogPost $post = null;
 
     #[ORM\Column(nullable: true)]

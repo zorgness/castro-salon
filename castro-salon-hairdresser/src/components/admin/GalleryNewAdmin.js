@@ -1,4 +1,5 @@
 import React, {Fragment, useState}  from 'react'
+import { useNavigate } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
@@ -13,6 +14,7 @@ const GalleryNewAdmin = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const urlBlogPosts = 'http://127.0.0.1:8000/api/blog_posts';
   const urlProductImage = 'http://127.0.0.1:8000/api/product_images';
@@ -53,8 +55,9 @@ const GalleryNewAdmin = () => {
         uploadImage(selectedFiles[i]);
         fetchDataWithMethod(urlProductImage, 'POST', {post: fetchedData['@id'], name: uid + selectedFiles[i].name})
       };
-      setSuccess('Successfully uploaded ')
-      localStorage.clear()
+
+      localStorage.clear();
+      navigate('/admin_gallery_index');
     }
   }
 

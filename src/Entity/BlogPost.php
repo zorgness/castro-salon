@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\BlogPostRepository;
@@ -20,16 +19,12 @@ class BlogPost
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    // #[Assert\NotBlank()]
     private ?string $title = null;
 
     #[ORM\Column(length:5000)]
-    // #[Assert\NotBlank()]
-    // #[Assert\Length([ 'min' => 10, 'max' => 255])]
     private ?string $text = null;
 
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: ProductImage::class)]
-    // #[Assert\Count(['min' => 1, 'max' => 5])]
     private Collection $productImages;
 
     public function __construct()

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, Fragment} from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { fetchData } from '../../Api/FecthData';
 import { checkDataAgeToCleanLocaleStorage } from '../../cleanStorage/CleanStorage'
 import Form from 'react-bootstrap/Form';
@@ -11,6 +11,7 @@ import { s3, bucketName, uid} from '../../../src/S3/S3'
 
 const GalleryEditAdmin = () => {
   const params = useParams()
+  const navigate = useNavigate()
 
   const imagePath = process.env.REACT_APP_AWS_S3_URL;
 
@@ -23,7 +24,7 @@ const GalleryEditAdmin = () => {
   const [error, setError] = useState('');
 
   const urlBlogPosts = `http://127.0.0.1:8000/api/blog_posts/${params.id}`;
-  const urlMain= 'http://127.0.0.1:8000';
+  const urlMain= process.env.REACT_APP_URL_MAIN;
   const urlProductImage = 'http://127.0.0.1:8000/api/product_images';
 
 
@@ -40,6 +41,7 @@ const GalleryEditAdmin = () => {
 
   }, []);
 
+  console.log(infos)
 
   const {title, text} = infos;
 
@@ -122,17 +124,26 @@ const GalleryEditAdmin = () => {
       console.log(fectchedData)
     }
 
-    // if more images to upload
-    for(let j = infos.productImages.length; j < (selectedFiles.length - infos.productImages.length); j++) {
+    // if more images to upload else if less images to upload
+    if (selectedFiles.length > infos.productImages.length) {
+
+      for(let j = infos.productImages.length; j < (selectedFiles.length - infos.productImages.length); j++) {
         const options = {post: infos['@id'], name: uid + selectedFiles[j].name}
         uploadImage(selectedFiles[j]);
         const fetchedData = await fetchDataWithMethod(urlProductImage, 'POST', options )
         console.log(fetchedData)
-
       }
+    }
+
+    if (selectedFiles.length < infos.productImages.length) {
+      console.log('not enough file')
+    }
+
+
 
     // setSuccess('Successfully uploaded ')
-    localStorage.clear()
+    localStorage.clear();
+    navigate('/admin_gallery_index');
   }
 }
 
@@ -156,7 +167,7 @@ const GalleryEditAdmin = () => {
 
   return (
     <Fragment>
-      <div>Gallery Edit</div>
+
 
       <div>
           {
@@ -180,7 +191,7 @@ const GalleryEditAdmin = () => {
         <Fragment>
 
           <div className='m-3'>
-            <h1>Gallery Edit</h1>
+            <h1>Gallery Edition</h1>
           </div>
 
           <div className='text-danger text-right'>

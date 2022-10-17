@@ -3,27 +3,29 @@ import { Link } from "react-router-dom";
 import { checkDataAgeToCleanLocaleStorage } from '../../cleanStorage/CleanStorage';
 import { fetchData } from '../../Api/FecthData';
 import Button from 'react-bootstrap/Button';
+import Popup from './PopUp';
+import { galleryDestroy } from './galleryDestroy';
 
 const GalleryIndexAdmin = () => {
-  const imagePath = process.env.REACT_APP_AWS_S3_URL;
 
+  const imagePath = process.env.REACT_APP_AWS_S3_URL;
   const [infos ,setInfos] = useState([]);
   const [nameImages, setNameImages] = useState([]);
+  const [show, setShow] = useState(false);
+  const [idBlogPost, setIdBlogPost] = useState(null);
 
-
-  useEffect(() => {
+    useEffect(() => {
 
     if (localStorage.getItem('storageDateIndex')) {
       const date = localStorage.getItem('storageDateIndex');
       checkDataAgeToCleanLocaleStorage (date);
      }
 
-    return () => {
-      getInfos();
+      return () => {
+        getInfos();
+      }
 
-    }
   }, []);
-
 
   // to slow  if is inside function getInfo
   const isInLocaleStorage = localStorage.hasOwnProperty('infoStorageGallery')
@@ -64,11 +66,25 @@ const GalleryIndexAdmin = () => {
         localStorage.setItem('storageDateIndex', Date.now());
       }
     }
-
   }
 
   // to sort images by post id
-  const sortedImages = nameImages?.sort((a,b)=> parseInt(a.post.replace(/[^0-9]/g, "")) - parseInt(b.post.replace(/[^0-9]/g, "")));
+  const sortedImages = nameImages?.sort((a,b)=> parseInt(a?.post.replace(/[^0-9]/g, "")) - parseInt(b?.post.replace(/[^0-9]/g, "")));
+
+  const handleClose = () => setShow(false);
+
+  const handleShow = (id) =>{
+    setShow(true);
+    setIdBlogPost(id)
+  }
+
+  const handleDelete = (id) => {
+    localStorage.clear()
+    galleryDestroy(id);
+    handleClose();
+
+  }
+
 
 
   return (
@@ -76,13 +92,28 @@ const GalleryIndexAdmin = () => {
 
         <div>GalleryIndex</div>
 
+
+         {
+           show &&
+             <Popup
+              show={show}
+              idBlogPost={idBlogPost}
+              handleClose={handleClose}
+              handleDelete={handleDelete}
+              setShow={setShow}
+             />
+        }
+
+
         {
+
 
         infos?.['hydra:member']?.map(({id, title} , index )=> {
 
            return (
 
-              <Fragment >
+              <Fragment key={id} >
+
 
                 <div className='m-3'>
                   <h2 className='border border-success rounded w-25'>{title}</h2>
@@ -91,14 +122,17 @@ const GalleryIndexAdmin = () => {
 
                 <div className="d-flex justify-content-around">
                   <Link to={`/admin_gallery_edit/${id}`} key={id}><Button variant="info">Modifier</Button></Link>
-                  <Button variant="danger">Supprimer</Button>
+                  <Button variant="danger" onClick={() => handleShow(id)}>Supprimer</Button>
                 </div>
+
 
               </Fragment>
 
             )
           })
         }
+
+
 
     </Fragment>
 
