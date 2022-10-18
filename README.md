@@ -1,7 +1,7 @@
 # castro-salon
 
 ## Hairdresser web site 
-* Database: Postgres Dockek image
+* Database: Postgres Docker image
 * Back-end: Symfony Api/Platform
 * Front-end: React JS 
 * Object storage: AWS S3
