@@ -83,7 +83,6 @@ const GalleryIndexAdmin = () => {
   }
 
   const handleDelete = (id) => {
-    setLoad(true)
     galleryDestroy(id);
     handleClose();
     setInfos(Object.entries(infos).filter(member => member.id !== id))

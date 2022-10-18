@@ -73,8 +73,6 @@ const Gallery = () => {
 
   }, [infos, load]);
 
-
-
   // to sort images by post id
   const sortedImages = nameImages?.sort((a,b)=> parseInt(a.post.replace(/[^0-9]/g, "")) - parseInt(b.post.replace(/[^0-9]/g, "")));
 
@@ -83,7 +81,10 @@ const Gallery = () => {
     <Fragment>
 
       <Banner />
-        <div>GalleryIndex</div>
+
+        <div className="d-flex justify-content-around flex-wrap">
+
+
 
         {
 
@@ -91,18 +92,25 @@ const Gallery = () => {
 
            return (
             <Link to={`/gallerie/${id}`} key={id} >
-              <Fragment >
 
-                <div className='m-3'>
-                  <h2 className='border border-success rounded w-25'>{title}</h2>
-                  {sortedImages[index] !== undefined && <img src={imagePath + sortedImages[index]?.name} alt={sortedImages[index]?.name} className="avatar-large" />}
+
+                <div className='m-5'>
+                  <h2 className='pattaya text-black' style={{fontSize: "24px"}}>{title}</h2>
+                  {sortedImages[index] !== undefined && <img src={imagePath + sortedImages[index]?.name} alt={sortedImages[index]?.name} className="avatar-super-large" />}
                 </div>
 
-              </Fragment>
+
+                {/* {sortedImages[index] !== undefined &&     <div className="card-category" style={{ backgroundImage: `linear-gradient( rgb(0 0 0 / 30%), rgb(0 0 0 / 30%), url(${imagePath + sortedImages[index]?.name});`}}>
+                    <h3>{title}</h3>
+                </div>} */}
+
+
             </Link>
             )
           })
         }
+
+        </div>
 
     </Fragment>
 
