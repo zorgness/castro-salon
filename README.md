@@ -2,7 +2,7 @@
 
 ## Hairdresser web site 
 * Database: Postgres Docker image
-* Back-end: Symfony Api/Platform
+* Back-end: Symfony V6 Api/Platform
 * Front-end: React JS 
 * Object storage: AWS S3
 
