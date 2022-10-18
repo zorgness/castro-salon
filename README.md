@@ -1,4 +1,4 @@
-# castro-salon
+# castro-salon (still in process)
 
 ## Hairdresser web site 
 * Database: Postgres Docker image
