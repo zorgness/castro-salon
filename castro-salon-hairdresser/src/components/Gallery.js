@@ -22,7 +22,6 @@ const Gallery = () => {
 
      // to slow  if is inside function getInfo
   const isInLocaleStorage = localStorage.hasOwnProperty('infoStorageGallery')
-
   const getInfos = async () => {
 
     if (isInLocaleStorage) {
@@ -37,20 +36,28 @@ const Gallery = () => {
 
     } else {
 
+      console.log('api')
+
       const fetchedData = await fetchData('http://127.0.0.1:8000/api/blog_posts');
       setInfos(fetchedData);
 
-      const tmpImageStorage = [];
 
-      fetchedData["hydra:member"]?.forEach(element => {
+      const tmpImageStorage = []
+
+      fetchedData["hydra:member"].forEach(element => {
+
+        console.log(element.productImages[0])
 
           const filesName = fetchData('http://localhost:8000' + element.productImages[0]);
 
           filesName.then(data => {
-            setNameImages(prevState => [...prevState, data])
-            tmpImageStorage.push(data);
+
+            tmpImageStorage.push(data)
+
+            setNameImages([...tmpImageStorage])
             localStorage.setItem('imageStorageGallery', JSON.stringify(tmpImageStorage))
           })
+
         })
 
       localStorage.setItem('infoStorageGallery', JSON.stringify(fetchedData));
@@ -73,9 +80,9 @@ const Gallery = () => {
 
   }, [infos, load]);
 
-  // to sort images by post id
-  const sortedImages = nameImages?.sort((a,b)=> parseInt(a.post.replace(/[^0-9]/g, "")) - parseInt(b.post.replace(/[^0-9]/g, "")));
 
+  // to sort images by post id
+  const sortedImages = nameImages?.sort((a,b)=> parseInt(a?.post.replace(/[^0-9]/g, "")) - parseInt(b?.post.replace(/[^0-9]/g, "")));
 
   return (
     <Fragment>
@@ -83,8 +90,6 @@ const Gallery = () => {
       <Banner />
 
         <div className="d-flex justify-content-around flex-wrap">
-
-
 
         {
 
@@ -100,7 +105,7 @@ const Gallery = () => {
                 </div>
 
 
-                {/* {sortedImages[index] !== undefined &&     <div className="card-category" style={{ backgroundImage: `linear-gradient( rgb(0 0 0 / 30%), rgb(0 0 0 / 30%), url(${imagePath + sortedImages[index]?.name});`}}>
+                {/* {sortedImages[index] !== undefined &&     <div className="card-category" style={{ backgroundImage: `url(${imagePath + sortedImages[index]?.name})` }}>
                     <h3>{title}</h3>
                 </div>} */}
 
