@@ -2,23 +2,20 @@ import React, {useState, useEffect, Fragment} from 'react'
 import { Link } from "react-router-dom";
 import { checkDataAgeToCleanLocaleStorage } from '../../cleanStorage/CleanStorage';
 import { fetchData } from '../../Api/FecthData';
-import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Popup from './PopUp';
 import { galleryDestroy } from './galleryDestroy';
-import { s3, bucketName } from "../../S3/S3";
+import { deleteImageFromS3 } from "../../S3/S3";
 
 const GalleryIndexAdmin = () => {
 
   const imagePath = process.env.REACT_APP_AWS_S3_URL;
-  const navigate = useNavigate()
 
   const [infos ,setInfos] = useState([]);
   const [nameImages, setNameImages] = useState([]);
   const [show, setShow] = useState(false);
   const [load, setLoad] = useState(true);
   const [idBlogPost, setIdBlogPost] = useState(null);
-
 
 
     useEffect(() => {
@@ -94,8 +91,6 @@ const GalleryIndexAdmin = () => {
 
     const toDeleteFromS3 = infos['hydra:member'].filter(member => member.id === id);
 
-
-
     for(let i = 0; i < toDeleteFromS3[0].productImages.length; i++) {
 
       const filesName = fetchData('http://localhost:8000' + toDeleteFromS3[0].productImages[i])
@@ -110,33 +105,11 @@ const GalleryIndexAdmin = () => {
     localStorage.clear()
   }
 
-  const deleteImageFromS3 = async (key) => {
-
-    return new Promise((resolve, reject) => {
-    try {
-      const params = { Bucket: bucketName, Key: key }
-      s3.deleteObject(params, function(err, data) {
-        if (err) reject(err);
-        // an error occurred
-        else resolve(data); // successful response
-    });
-
-    } catch (err) {
-
-      reject(err);
-    }
-
-  });
-
-  }
-
-
 
   return (
     <Fragment>
 
         <div>GalleryIndex</div>
-
 
          {
            show &&
@@ -149,9 +122,7 @@ const GalleryIndexAdmin = () => {
              />
         }
 
-
         {
-
 
         infos?.['hydra:member']?.map(({id, title} , index )=> {
 
@@ -176,8 +147,6 @@ const GalleryIndexAdmin = () => {
             )
           })
         }
-
-
 
     </Fragment>
 

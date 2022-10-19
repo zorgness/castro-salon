@@ -5,7 +5,7 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Butterfly from '../../images/butterfly.png'
 import { fetchDataWithMethod } from '../../Api/FetchDataWithMethod'
-import { s3, bucketName, uid} from '../../../src/S3/S3'
+import { uploadImageBlob, uid} from '../../../src/S3/S3'
 import Compressor from 'compressorjs';
 
 const GalleryNewAdmin = () => {
@@ -68,7 +68,7 @@ const GalleryNewAdmin = () => {
 
       for(let i = 0; i < selectedFiles.length; i++) {
 
-        uploadImage(selectedFiles[i]);
+        uploadImageBlob(selectedFiles[i]);
         fetchDataWithMethod(urlProductImage, 'POST', {post: fetchedData['@id'], name: uid + selectedFiles[i].name})
       };
 
@@ -78,26 +78,6 @@ const GalleryNewAdmin = () => {
   }
 
 
-  const uploadImage = async (blob) => {
-
-    const file = new File([blob], blob.name)
-
-    try {
-
-      const params = ({
-        Body: file,
-        Bucket: bucketName,
-        Key: uid + file.name,
-        Expires: 60
-      })
-
-      return await s3.upload(params).promise()
-
-    } catch (e) {
-
-      setError(e.message);
-    }
-  };
 
   return (
 
