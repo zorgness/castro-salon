@@ -2,14 +2,16 @@ import React, {useState, useEffect, Fragment} from 'react'
 import { Link } from "react-router-dom";
 import { checkDataAgeToCleanLocaleStorage } from '../../cleanStorage/CleanStorage';
 import { fetchData } from '../../Api/FecthData';
+import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Popup from './PopUp';
-import { galleryDestroy } from './galleryDestroy';
+import { galleryDestroy } from './adminDestroy';
 import { deleteImageFromS3 } from "../../S3/S3";
 
 const GalleryIndexAdmin = () => {
 
   const imagePath = process.env.REACT_APP_AWS_S3_URL;
+  const navigate = useNavigate()
 
   const [infos ,setInfos] = useState([]);
   const [nameImages, setNameImages] = useState([]);
@@ -96,13 +98,13 @@ const GalleryIndexAdmin = () => {
       const filesName = fetchData('http://localhost:8000' + toDeleteFromS3[0].productImages[i])
 
       filesName.then(data => {
-        console.log(data.name)
         deleteImageFromS3(data.name)
       }
         );
     }
 
     localStorage.clear()
+    navigate('/gallerie')
   }
 
 

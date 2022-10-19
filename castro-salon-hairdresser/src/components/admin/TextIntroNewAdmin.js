@@ -18,7 +18,7 @@ const TextIntroNewAdmin = () => {
   const navigate = useNavigate();
 
   const urlTextIntros = 'http://127.0.0.1:8000/api/text_intros';
-  const urlProductImage = 'http://127.0.0.1:8000/api/product_images';
+  const urlCoverImage = 'http://127.0.0.1:8000/api/cover_images';
 
 
   const handleTitle = (e) => {
@@ -63,11 +63,13 @@ const TextIntroNewAdmin = () => {
     }
 
     if(title !== '' && text !== '') {
-      const options = {title: title, text: text};
-      const fetchedData = await fetchDataWithMethod(urlTextIntros, 'POST', options);
+      uploadImageBlob(selectedFiles);
+      const fetchedData = await fetchDataWithMethod(urlCoverImage, 'POST', { name: uid + selectedFiles.name})
+      console.log(fetchedData)
+      const options = {title: title, text: text, image: fetchedData['@id']};
+      const postTextIntro = await fetchDataWithMethod(urlTextIntros, 'POST', options);
 
-        uploadImageBlob(selectedFiles);
-        fetchDataWithMethod(urlProductImage, 'POST', {post: fetchedData['@id'], name: uid + selectedFiles.name})
+      console.log(postTextIntro)
 
       localStorage.clear();
       navigate('/');
