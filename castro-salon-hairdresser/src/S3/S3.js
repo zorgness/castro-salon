@@ -1,6 +1,7 @@
 import aws from 'aws-sdk';
 
 const region = process.env.REACT_APP_AWS_S3_REGION;
+
 export const bucketName = process.env.REACT_APP_AWS_S3_BUCKET_NAME;
 const accessKeyId= process.env.REACT_APP_AWS_S3_PUBLIC_KEY;
 const secretAccessKey= process.env.REACT_APP_AWS_S3_PRIVATE_KEY;
@@ -11,6 +12,15 @@ export const s3 = new aws.S3({
   bucketName, region, accessKeyId, secretAccessKey, signatureVersion: 'v4'
 });
 
+export const transformFileName = (file) => {
+    const filename = file.name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+    const fileExtension = file.name.split('.').pop();
+    // Define the image name
+    let mainImgName = filename + '-' + uid + '.' + fileExtension;
+
+    return mainImgName;
+  }
+
 export const uploadImageBlob = async (blob) => {
 
   const file = new File([blob], blob.name)
@@ -20,7 +30,7 @@ export const uploadImageBlob = async (blob) => {
     const params = ({
       Body: file,
       Bucket: bucketName,
-      Key: uid + file.name,
+      Key: transformFileName(file),
       Expires: 60
     })
 
@@ -39,7 +49,7 @@ export const uploadImageFile = async (file) => {
     const params = ({
       Body: file,
       Bucket: bucketName,
-      Key: uid + file.name,
+      Key: transformFileName(file),
       Expires: 60
     })
 

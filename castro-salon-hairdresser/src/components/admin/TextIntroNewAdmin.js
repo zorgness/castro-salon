@@ -5,7 +5,7 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Butterfly from '../../images/butterfly.png'
 import { fetchDataWithMethod } from '../../Api/FetchDataWithMethod'
-import { uploadImageBlob, uid} from '../../../src/S3/S3'
+import { uploadImageBlob, transformFileName} from '../../../src/S3/S3'
 import Compressor from 'compressorjs';
 
 const TextIntroNewAdmin = () => {
@@ -64,7 +64,7 @@ const TextIntroNewAdmin = () => {
 
     if(title !== '' && text !== '') {
       uploadImageBlob(selectedFiles);
-      const fetchedData = await fetchDataWithMethod(urlCoverImage, 'POST', { name: uid + selectedFiles.name})
+      const fetchedData = await fetchDataWithMethod(urlCoverImage, 'POST', { name: transformFileName(selectedFiles)})
       console.log(fetchedData)
       const options = {title: title, text: text, image: fetchedData['@id']};
       const postTextIntro = await fetchDataWithMethod(urlTextIntros, 'POST', options);

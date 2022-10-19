@@ -5,7 +5,7 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Butterfly from '../../images/butterfly.png'
 import { fetchDataWithMethod } from '../../Api/FetchDataWithMethod'
-import { uploadImageBlob, uid} from '../../../src/S3/S3'
+import { uploadImageBlob, transformFileName } from '../../../src/S3/S3'
 import Compressor from 'compressorjs';
 
 const GalleryNewAdmin = () => {
@@ -53,8 +53,6 @@ const GalleryNewAdmin = () => {
   }
 }
 
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (selectedFiles.length > 5) {
@@ -69,7 +67,7 @@ const GalleryNewAdmin = () => {
       for(let i = 0; i < selectedFiles.length; i++) {
 
         uploadImageBlob(selectedFiles[i]);
-        fetchDataWithMethod(urlProductImage, 'POST', {post: fetchedData['@id'], name: uid + selectedFiles[i].name})
+        fetchDataWithMethod(urlProductImage, 'POST', {post: fetchedData['@id'], name: transformFileName(selectedFiles[i])})
       };
 
       localStorage.clear();

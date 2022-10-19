@@ -21,7 +21,7 @@ const MyVerticallyCenteredModal = props =>  {
         </p>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={props.onHide} style={{backgroundColor: 'hotpink', border: '1px solid hotpink'}}>Close</Button>
+        <Button onClick={props.onHide} style={{backgroundColor: ' #670BFF', border: '1px solid  #670BFF'}}>Close</Button>
       </Modal.Footer>
     </Modal>
   );

@@ -7,7 +7,7 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Butterfly from '../../images/butterfly.png'
 import { fetchDataWithMethod } from '../../Api/FetchDataWithMethod'
-import { uploadImageFile, uid, deleteImageFromS3 } from '../../../src/S3/S3'
+import { uploadImageFile, deleteImageFromS3, transformFileName  } from '../../../src/S3/S3'
 import Compressor from 'compressorjs';
 
 const GalleryEditAdmin = () => {
@@ -150,10 +150,9 @@ const GalleryEditAdmin = () => {
       }
 
       for(let i = 0; i < infos.productImages.length; i++) {
-        const options = {post: infos['@id'], name: uid + selectedFiles[i].name};
+        const options = {post: infos['@id'], name:  transformFileName(selectedFiles[i])};
         uploadImageFile(selectedFiles[i]);
-        const fectchedData = await fetchDataWithMethod( urlMain + infos.productImages[i], 'PUT', options )
-        console.log(fectchedData)
+        await fetchDataWithMethod( urlMain + infos.productImages[i], 'PUT', options )
       }
 
 

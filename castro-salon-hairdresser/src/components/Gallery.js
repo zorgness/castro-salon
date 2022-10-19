@@ -46,8 +46,6 @@ const Gallery = () => {
 
       fetchedData["hydra:member"].forEach(element => {
 
-        console.log(element.productImages[0])
-
           const filesName = fetchData('http://localhost:8000' + element.productImages[0]);
 
           filesName.then(data => {

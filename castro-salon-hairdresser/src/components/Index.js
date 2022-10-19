@@ -66,27 +66,9 @@ const Index = () => {
     }
   }
 
-  console.log(infos)
-  console.log(nameImages)
-
-  // const title = infos?.["hydra:member"]?.[0]?.title;
-  // const text = info?.["hydra:member"]?.[0]?.text;
 
   // to sort images by id
   const sortedImages = nameImages?.sort((a,b)=> a?.id - b?.id);
-
-      // infos.map(({title, text}) => {
-      //   return (
-
-      //     <Fragment>
-
-      //     <h2>{title}</h2>
-      //     <p>{text}</p>
-
-      //     </Fragment>
-
-      //   )
-      // })
 
 
   return (
@@ -96,9 +78,9 @@ const Index = () => {
 
       {
 
-infos?.['hydra:member']?.map(({id, title, text} , index )=> {
+    infos?.['hydra:member']?.map(({id, title, text} , index )=> {
 
-   return (
+        return (
 
         <Fragment key={id}>
 
@@ -114,11 +96,9 @@ infos?.['hydra:member']?.map(({id, title, text} , index )=> {
             </div>} */}
 
         </Fragment>
-
-
-    )
-  })
-}
+          )
+        })
+      }
 
 
     </div>

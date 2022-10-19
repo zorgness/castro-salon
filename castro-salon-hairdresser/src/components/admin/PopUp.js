@@ -13,12 +13,12 @@ const Popup = ({show, idBlogPost, handleClose, handleDelete}) => {
               <Modal.Header closeButton>
                 <Modal.Title>Confirmation requested</Modal.Title>
               </Modal.Header>
-              <Modal.Body>Are you sure that you want to delete Post {idBlogPost}</Modal.Body>
+              <Modal.Body>Are you sure that you want to <span className='text-danger'>DELETE</span></Modal.Body>
               <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose} >
                   Close
                 </Button>
-                <Button variant="primary" onClick={() => handleDelete(idBlogPost)}>
+                <Button variant="danger" onClick={() => handleDelete(idBlogPost)}>
                   Delete
                 </Button>
               </Modal.Footer>
