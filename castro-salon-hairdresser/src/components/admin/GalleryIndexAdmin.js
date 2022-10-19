@@ -99,8 +99,8 @@ const GalleryIndexAdmin = () => {
 
       filesName.then(data => {
         deleteImageFromS3(data.name)
-      }
-        );
+      });
+
     }
 
     localStorage.clear()

@@ -74,9 +74,6 @@ const TextIntroIndex = () => {
     }
   }
 
-  // console.log(infos)
-  // console.log(nameImages)
-
   // to sort images by id
   const sortedImages = nameImages?.sort((a,b)=> a?.id - b?.id);
 
