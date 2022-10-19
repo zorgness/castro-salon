@@ -14,6 +14,7 @@ import Contact from './components/Contact';
 import GalleryNewAdmin from './components/admin/GalleryNewAdmin';
 import GalleryIndexAdmin from './components/admin/GalleryIndexAdmin';
 import GalleryEditAdmin from './components/admin/GalleryEditAdmin';
+import TextIntroNewAdmin from './components/admin/TextIntroNewAdmin';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="/gallerie/:id" element={<GalleryShow />}/>
             <Route path="/contact" element={<Contact />}/>
             <Route path="/login" element={<Login />}/>
+            <Route path="/admin_text_intro_new" element={<TextIntroNewAdmin />}/>
             <Route path="/admin_gallery_new" element={<GalleryNewAdmin />}/>
             <Route path="/admin_gallery_index" element={<GalleryIndexAdmin />}/>
             <Route path="/admin_gallery_edit/:id" element={<GalleryEditAdmin />}/>
