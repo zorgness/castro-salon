@@ -2,19 +2,22 @@ import React, {useState, useEffect, Fragment} from 'react'
 import { Link } from "react-router-dom";
 import { checkDataAgeToCleanLocaleStorage } from '../../cleanStorage/CleanStorage';
 import { fetchData } from '../../Api/FecthData';
+import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Popup from './PopUp';
-import { galleryDestroy } from './galleryDestroy';
+import { galleryDestroy } from './adminDestroy';
+import { deleteImageFromS3 } from "../../S3/S3";
 
 const GalleryIndexAdmin = () => {
 
   const imagePath = process.env.REACT_APP_AWS_S3_URL;
+  const navigate = useNavigate()
+
   const [infos ,setInfos] = useState([]);
   const [nameImages, setNameImages] = useState([]);
   const [show, setShow] = useState(false);
   const [load, setLoad] = useState(true);
   const [idBlogPost, setIdBlogPost] = useState(null);
-
 
 
     useEffect(() => {
@@ -40,6 +43,7 @@ const GalleryIndexAdmin = () => {
 
     } else {
 
+      console.log('api')
       const fetchedData = await fetchData('http://127.0.0.1:8000/api/blog_posts');
       setInfos(fetchedData);
 
@@ -86,19 +90,28 @@ const GalleryIndexAdmin = () => {
   const handleDelete = (id) => {
     galleryDestroy(id);
     handleClose();
-    setInfos(Object.entries(infos).filter(member => member.id !== id))
+
+    const toDeleteFromS3 = infos['hydra:member'].filter(member => member.id === id);
+
+    for(let i = 0; i < toDeleteFromS3[0].productImages.length; i++) {
+
+      const filesName = fetchData('http://localhost:8000' + toDeleteFromS3[0].productImages[i])
+
+      filesName.then(data => {
+        deleteImageFromS3(data.name)
+      }
+        );
+    }
+
     localStorage.clear()
-    setLoad(true);
+    navigate('/gallerie')
   }
-
-
 
 
   return (
     <Fragment>
 
         <div>GalleryIndex</div>
-
 
          {
            show &&
@@ -111,9 +124,7 @@ const GalleryIndexAdmin = () => {
              />
         }
 
-
         {
-
 
         infos?.['hydra:member']?.map(({id, title} , index )=> {
 
@@ -138,8 +149,6 @@ const GalleryIndexAdmin = () => {
             )
           })
         }
-
-
 
     </Fragment>
 

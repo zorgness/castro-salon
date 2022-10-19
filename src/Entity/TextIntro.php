@@ -18,8 +18,11 @@ class TextIntro
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 5000)]
     private ?string $text = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?CoverImage $image = null;
 
     public function getId(): ?int
     {
@@ -46,6 +49,18 @@ class TextIntro
     public function setText(string $text): self
     {
         $this->text = $text;
+
+        return $this;
+    }
+
+    public function getImage(): ?CoverImage
+    {
+        return $this->image;
+    }
+
+    public function setImage(?CoverImage $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

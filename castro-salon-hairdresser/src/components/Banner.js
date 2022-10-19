@@ -5,7 +5,7 @@ const Banner = () => {
     <div className="banner" >
         <div className="container">
           <h1><strong>ANAIS DE CASTRO LEMOS</strong></h1>
-          <p>Professionnal HairStylist</p>
+          <p>Professionnal Hair Stylist</p>
 
         </div>
     </div>

@@ -7,7 +7,8 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Butterfly from '../../images/butterfly.png'
 import { fetchDataWithMethod } from '../../Api/FetchDataWithMethod'
-import { s3, bucketName, uid} from '../../../src/S3/S3'
+import { uploadImageFile, uid, deleteImageFromS3 } from '../../../src/S3/S3'
+import Compressor from 'compressorjs';
 
 const GalleryEditAdmin = () => {
   const params = useParams()
@@ -26,7 +27,7 @@ const GalleryEditAdmin = () => {
 
   const urlBlogPosts = `http://127.0.0.1:8000/api/blog_posts/${params.id}`;
   const urlMain= process.env.REACT_APP_URL_MAIN;
-  const urlProductImage = 'http://127.0.0.1:8000/api/product_images';
+  // const urlProductImage = 'http://127.0.0.1:8000/api/product_images';
 
 
   useEffect(() => {
@@ -102,11 +103,25 @@ const GalleryEditAdmin = () => {
     setSuccess('');
   };
 
-  const handleFileInput = (e) => {
-    setSelectedFiles(e.target.files);
+  const handleCompressedUpload = (e) => {
     setError('');
     setSuccess('');
- }
+    const images = e.target.files;
+
+    for (let i=0; i<images.length; i++) {
+
+      const quality = images[i].size > 9000 ? 0.1 : 0.8;
+
+      new Compressor(images[i], {
+        quality: quality, // 0.6 can also be used, but its not recommended to go below.
+        success: (compressedResult) => {
+          // compressedResult has the compressed file.
+          // Use the compressed file to upload the images to your server.
+          setSelectedFiles(prevState => [...prevState, compressedResult])
+        },
+      });
+    }
+  }
 
  const handleSubmit = async (e) => {
   e.preventDefault();
@@ -116,60 +131,52 @@ const GalleryEditAdmin = () => {
   }
 
   if(titleEdit !== '' && textEdit !== '') {
-    const options = {title: titleEdit, text: textEdit};
-    const fetchedData = await fetchDataWithMethod(urlBlogPosts, 'PUT', options);
-    console.log(fetchedData)
+
 
     if (selectedFiles.length < infos.productImages.length) {
-      setError('not enough file')
+      setError('not enough images')
     }
+
+    if (selectedFiles.length > infos.productImages.length) {
+      setError('too many images')
+    }
+
+
+      const options = {title: titleEdit, text: textEdit};
+      await fetchDataWithMethod(urlBlogPosts, 'PUT', options);
+
+      for(let i = 0; i < nameImages.length; i++) {
+        deleteImageFromS3(nameImages[i].name)
+      }
+
+      for(let i = 0; i < infos.productImages.length; i++) {
+        const options = {post: infos['@id'], name: uid + selectedFiles[i].name};
+        uploadImageFile(selectedFiles[i]);
+        const fectchedData = await fetchDataWithMethod( urlMain + infos.productImages[i], 'PUT', options )
+        console.log(fectchedData)
+      }
+
 
     // if same number of images to upload
-    for(let i = 0; i < infos.productImages.length; i++) {
-      const options = {post: infos['@id'], name: uid + selectedFiles[i].name};
-      uploadImage(selectedFiles[i]);
-      const fectchedData = await fetchDataWithMethod( urlMain + infos.productImages[i], 'PUT', options )
-      console.log(fectchedData)
-    }
+
 
     // if more images to upload else if less images to upload
-    if (selectedFiles.length > infos.productImages.length) {
+    // if (selectedFiles.length > infos.productImages.length) {
 
-      for(let j = infos.productImages.length; j < (selectedFiles.length - infos.productImages.length); j++) {
-        const options = {post: infos['@id'], name: uid + selectedFiles[j].name}
-        uploadImage(selectedFiles[j]);
-        const fetchedData = await fetchDataWithMethod(urlProductImage, 'POST', options )
-        console.log(fetchedData)
-      }
-    }
-
-
+    //   for(let j = infos.productImages.length; j < (selectedFiles.length - infos.productImages.length); j++) {
+    //     const options = {post: infos['@id'], name: uid + selectedFiles[j].name}
+    //     uploadImage(selectedFiles[j]);
+    //     const fetchedData = await fetchDataWithMethod(urlProductImage, 'POST', options )
+    //     console.log(fetchedData)
+    //   }
+    // }
 
 
-
-    // setSuccess('Successfully uploaded ')
     localStorage.clear();
     navigate('/admin_gallery_index');
   }
 }
 
- const uploadImage = async (file) => {
-
-  try {
-    const params = ({
-      Body: file,
-      Bucket: bucketName,
-      Key: uid + file.name,
-      Expires: 60
-    })
-
-    return await s3.upload(params).promise()
-
-  } catch (e) {
-
-    setError(e.message);
-  }
-};
 
   return (
     <Fragment>
@@ -222,7 +229,7 @@ const GalleryEditAdmin = () => {
 
             <Form.Group controlId="formFileMultiple" className="mb-3">
               <Form.Label>Multiple images</Form.Label>
-              <Form.Control type="file" multiple onChange={handleFileInput} />
+              <Form.Control type="file" multiple onChange={(e) => handleCompressedUpload(e)} />
             </Form.Group>``
 
             <Button style={{backgroundColor: 'hotpink', border: '1px solid hotpink'}} type="submit">

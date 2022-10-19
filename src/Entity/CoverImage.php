@@ -18,6 +18,9 @@ class CoverImage
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+
+    private ?TextIntro $textIntro = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -33,5 +36,10 @@ class CoverImage
         $this->name = $name;
 
         return $this;
+    }
+
+    public function getTextIntro(): ?TextIntro
+    {
+        return $this->textIntro;
     }
 }
