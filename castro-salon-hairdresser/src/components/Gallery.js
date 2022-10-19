@@ -4,6 +4,7 @@ import Banner from './Banner';
 import { fetchData } from '../Api/FecthData';
 import { checkDataAgeToCleanLocaleStorage } from '../cleanStorage/CleanStorage'
 
+
 const Gallery = () => {
 
   const imagePath = process.env.REACT_APP_AWS_S3_URL;
@@ -87,6 +88,10 @@ const Gallery = () => {
 
       <Banner />
 
+        <div className="index-item">
+
+        <h1 className='pattaya text-center m-3' style={{fontSize: "48px"}}>Gallerie</h1>
+
         <div className="d-flex justify-content-around flex-wrap">
 
         {
@@ -98,7 +103,7 @@ const Gallery = () => {
 
 
                 <div className='m-5'>
-                  <h2 className='pattaya text-black' style={{fontSize: "24px"}}>{title}</h2>
+                  <h2 className='pattaya text-secondary text-end' style={{fontSize: "24px"}}>{title}</h2>
                   {sortedImages[index] !== undefined && <img src={imagePath + sortedImages[index]?.name} alt={sortedImages[index]?.name} className="avatar-super-large" />}
                 </div>
 
@@ -114,10 +119,12 @@ const Gallery = () => {
         }
 
         </div>
+        </div>
 
     </Fragment>
 
   )
+
 }
 
 export default Gallery

@@ -1,7 +1,9 @@
-import React, {useState, useEffect, Fragment} from 'react'
+import React, {useState, useEffect} from 'react'
 import Banner from './Banner';
+import Brand from './Brand';
 import { fetchData } from '../Api/FecthData';
 import { checkDataAgeToCleanLocaleStorage } from '../cleanStorage/CleanStorage'
+import { capitalizeFirstLetter } from '../util/capitalize';
 
 const Index = () => {
 
@@ -74,31 +76,54 @@ const Index = () => {
   return (
 
     <div>
+
       <Banner />
 
       {
 
     infos?.['hydra:member']?.map(({id, title, text} , index )=> {
 
+         const styleByIndex = index % 2 === 0 ?  "m-4 d-flex flex-wrap justify-content-around" : "m-4 d-flex flex-wrap justify-content-around flex-row-reverse"
+
+        const bubble = index % 2 === 0 ? <div className='bubble1'></div> : <div className='bubble2'></div>
+
+
         return (
 
-        <Fragment key={id}>
-
-            <div className='m-5'>
-              <h2 className='pattaya text-black' style={{fontSize: "24px"}}>{title}</h2>
-              <p>{text}</p>
-              {sortedImages[index] !== undefined && <img src={imagePath + sortedImages[index]?.name} alt={sortedImages[index]?.name} className="avatar-super-large" />}
-            </div>
+            <div className="index-item">
 
 
-            {/* {sortedImages[index] !== undefined &&     <div className="card-category" style={{ backgroundImage: `url(${imagePath + sortedImages[index]?.name})` }}>
-                <h3>{title}</h3>
-            </div>} */}
+            <div key={id} className={styleByIndex}>
 
-        </Fragment>
-          )
-        })
+              {
+                bubble
+              }
+
+              <div className="intro">
+                <h2 className='pattaya text-black' style={{fontSize: "24px"}}>{capitalizeFirstLetter(title)}</h2>
+                  <p className="">{text}</p>
+              </div>
+
+
+
+                <div className='text-center image-intro' >
+                  <div>
+                    {sortedImages[index] !== undefined && <img src={imagePath + sortedImages[index]?.name} alt={sortedImages[index]?.name} className="image-index m-2 rounded " />}
+                  </div>
+                </div>
+
+        </div>
+
+        </div>
+
+           )
+          })
       }
+
+      <div className="index-item">
+         <Brand />
+      </div>
+
 
 
     </div>

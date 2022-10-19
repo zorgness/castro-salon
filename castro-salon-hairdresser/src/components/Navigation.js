@@ -21,7 +21,7 @@ function Navigation() {
           <Container className="mx-5">
 
             <Navbar.Collapse id="responsive-navbar-nav"  >
-              <Nav className="pattaya" >
+              <Nav className="pattaya text-center" >
                 <Nav.Link href="/" className='mx-5'>Acceuil</Nav.Link>
                 <Nav.Link href="/gallerie" className='mx-5'>Gallerie</Nav.Link>
                 <Nav.Link href="/contact" className='mx-5'>Contact</Nav.Link>

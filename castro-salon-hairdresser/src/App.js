@@ -1,6 +1,7 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navigation from './components/Navigation';
+import Footer from './components/Footer'
 import Index from './components/Index';
 import Login from './components/Login';
 import {
@@ -37,6 +38,8 @@ function App() {
             <Route path="/admin_gallery_edit/:id" element={<GalleryEditAdmin />}/>
         </Routes>
       </BrowserRouter>
+
+      <Footer />
 
     </div>
   );
