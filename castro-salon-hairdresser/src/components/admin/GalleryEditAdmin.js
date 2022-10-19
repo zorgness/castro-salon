@@ -26,7 +26,7 @@ const GalleryEditAdmin = () => {
 
   const urlBlogPosts = `http://127.0.0.1:8000/api/blog_posts/${params.id}`;
   const urlMain= process.env.REACT_APP_URL_MAIN;
-  const urlProductImage = 'http://127.0.0.1:8000/api/product_images';
+  // const urlProductImage = 'http://127.0.0.1:8000/api/product_images';
 
 
   useEffect(() => {
@@ -116,38 +116,44 @@ const GalleryEditAdmin = () => {
   }
 
   if(titleEdit !== '' && textEdit !== '') {
-    const options = {title: titleEdit, text: textEdit};
-    const fetchedData = await fetchDataWithMethod(urlBlogPosts, 'PUT', options);
-    console.log(fetchedData)
+
 
     if (selectedFiles.length < infos.productImages.length) {
-      setError('not enough file')
+      setError('not enough images')
     }
+
+    if (selectedFiles.length > infos.productImages.length) {
+      setError('too many images')
+    }
+
+
+      const options = {title: titleEdit, text: textEdit};
+      const fetchedData = await fetchDataWithMethod(urlBlogPosts, 'PUT', options);
+      console.log(fetchedData)
+
+      for(let i = 0; i < infos.productImages.length; i++) {
+        const options = {post: infos['@id'], name: uid + selectedFiles[i].name};
+        uploadImage(selectedFiles[i]);
+        const fectchedData = await fetchDataWithMethod( urlMain + infos.productImages[i], 'PUT', options )
+        console.log(fectchedData)
+      }
+
 
     // if same number of images to upload
-    for(let i = 0; i < infos.productImages.length; i++) {
-      const options = {post: infos['@id'], name: uid + selectedFiles[i].name};
-      uploadImage(selectedFiles[i]);
-      const fectchedData = await fetchDataWithMethod( urlMain + infos.productImages[i], 'PUT', options )
-      console.log(fectchedData)
-    }
+
 
     // if more images to upload else if less images to upload
-    if (selectedFiles.length > infos.productImages.length) {
+    // if (selectedFiles.length > infos.productImages.length) {
 
-      for(let j = infos.productImages.length; j < (selectedFiles.length - infos.productImages.length); j++) {
-        const options = {post: infos['@id'], name: uid + selectedFiles[j].name}
-        uploadImage(selectedFiles[j]);
-        const fetchedData = await fetchDataWithMethod(urlProductImage, 'POST', options )
-        console.log(fetchedData)
-      }
-    }
-
-
+    //   for(let j = infos.productImages.length; j < (selectedFiles.length - infos.productImages.length); j++) {
+    //     const options = {post: infos['@id'], name: uid + selectedFiles[j].name}
+    //     uploadImage(selectedFiles[j]);
+    //     const fetchedData = await fetchDataWithMethod(urlProductImage, 'POST', options )
+    //     console.log(fetchedData)
+    //   }
+    // }
 
 
-
-    // setSuccess('Successfully uploaded ')
     localStorage.clear();
     navigate('/admin_gallery_index');
   }

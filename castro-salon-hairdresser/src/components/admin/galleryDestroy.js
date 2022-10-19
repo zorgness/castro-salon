@@ -1,7 +1,5 @@
 
 import { fetchDataWithMethod } from "../../Api/FetchDataWithMethod";
-import { s3 } from "../../S3/S3";
-
 
 
 export const galleryDestroy = async (idBlogPost) => {
