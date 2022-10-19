@@ -50,8 +50,9 @@ const GalleryIndexAdmin = () => {
           const filesName = fetchData('http://localhost:8000' + element.productImages[0]);
 
           filesName.then(data => {
-            setNameImages(prevState => [...prevState, data])
             tmpImageStorage.push(data);
+            setNameImages([...tmpImageStorage])
+
             localStorage.setItem('imageStorageGallery', JSON.stringify(tmpImageStorage))
           })
         })
@@ -87,6 +88,7 @@ const GalleryIndexAdmin = () => {
     handleClose();
     setInfos(Object.entries(infos).filter(member => member.id !== id))
     localStorage.clear()
+    setLoad(true);
   }
 
 

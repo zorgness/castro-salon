@@ -8,10 +8,12 @@ const GalleryShow = () => {
   const params = useParams()
 
   const imagePath = process.env.REACT_APP_AWS_S3_URL;
+  const urlBlogPosts = `http://127.0.0.1:8000/api/blog_posts/${params.id}`;
 
   const [infos ,setInfos] = useState([]);
   const [nameImages, setNameImages] = useState([]);
   const [load, setLoad] = useState(true);
+
 
 
   useEffect(() => {
@@ -21,23 +23,24 @@ const GalleryShow = () => {
       checkDataAgeToCleanLocaleStorage (date);
      }
 
+  const isInLocaleStorage = localStorage.hasOwnProperty(`infoStorageGallery${params.id}`)
   const getInfos = async () => {
-
-    const isInLocaleStorage = localStorage.hasOwnProperty(`infoStorageGallery${params.id}`)
 
     if (isInLocaleStorage) {
 
       console.log(`storage gallery ${params.id}`)
 
       const infoStorage = JSON.parse(localStorage.getItem(`infoStorageGallery${params.id}`));
-      const imageStorage = JSON.parse(localStorage.getItem(`imageStorageGallery${params.id}`));
+      const imagesStorage = JSON.parse(localStorage.getItem(`imageStorageGallery${params.id}`));
 
       setInfos(infoStorage);
-      setNameImages(imageStorage);
+      setNameImages(imagesStorage);
 
     } else {
 
-      const fetchedData = await fetchData(`http://127.0.0.1:8000/api/blog_posts/${params.id}`);
+      console.log("api")
+
+      const fetchedData = await fetchData(urlBlogPosts);
       setInfos(fetchedData);
 
       const tmpImageStorage = [];
@@ -47,8 +50,8 @@ const GalleryShow = () => {
           const filesName = fetchData('http://localhost:8000' + element);
 
           filesName.then(data => {
-            setNameImages(prevState => [...prevState, data])
             tmpImageStorage.push(data);
+            setNameImages([...tmpImageStorage])
             localStorage.setItem(`imageStorageGallery${params.id}`, JSON.stringify(tmpImageStorage))
           })
         })
@@ -69,7 +72,7 @@ const GalleryShow = () => {
       }
     }
 
-  }, [infos, load, params.id]);
+  }, [infos, load, params.id, urlBlogPosts]);;
 
 
 
@@ -81,10 +84,10 @@ const GalleryShow = () => {
 
       <div>
           {
-            nameImages.map(({id, name}) => {
+            nameImages?.map(({id, name}) => {
               return (
 
-                <img key={id} src={imagePath + name} alt={name} className="avatar-large m-2"  />
+                <img key={id} src={imagePath + name} alt={name} className="m-2 w-25"  />
               )
             })
           }

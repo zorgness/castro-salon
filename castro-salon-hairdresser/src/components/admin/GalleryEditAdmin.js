@@ -36,15 +36,15 @@ const GalleryEditAdmin = () => {
       checkDataAgeToCleanLocaleStorage (date);
      }
 
-     const isInLocaleStorage = localStorage.hasOwnProperty(`infoStorageGallery${params.id}`)
+     const isInLocaleStorage = localStorage.hasOwnProperty(`infoStorageGalleryAdmin${params.id}`)
      const getInfos = async () => {
 
        if (isInLocaleStorage) {
 
-         console.log(`storage gallery ${params.id}`)
+         console.log(`storage gallery admin ${params.id}`)
 
-         const infoStorage = JSON.parse(localStorage.getItem(`infoStorageGallery${params.id}`));
-         const imageStorage = JSON.parse(localStorage.getItem(`imageStorageGallery${params.id}`));
+         const infoStorage = JSON.parse(localStorage.getItem(`infoStorageGalleryAdmin${params.id}`));
+         const imageStorage = JSON.parse(localStorage.getItem(`imageStorageGalleryAdmin${params.id}`));
 
          setInfos(infoStorage);
          setNameImages(imageStorage);
@@ -61,13 +61,14 @@ const GalleryEditAdmin = () => {
              const filesName = fetchData( urlMain + element);
 
              filesName.then(data => {
-               setNameImages(prevState => [...prevState, data])
-               tmpImageStorage.push(data);
-               localStorage.setItem(`imageStorageGallery${params.id}`, JSON.stringify(tmpImageStorage))
+                tmpImageStorage.push(data);
+                setNameImages([...tmpImageStorage])
+
+               localStorage.setItem(`imageStorageGalleryAdmin${params.id}`, JSON.stringify(tmpImageStorage))
              })
            })
 
-         localStorage.setItem(`infoStorageGallery${params.id}`, JSON.stringify(fetchedData));
+         localStorage.setItem(`infoStorageGalleryAdmin${params.id}`, JSON.stringify(fetchedData));
 
          if (!localStorage.getItem('storageDateIndex') ) {
            localStorage.setItem('storageDateIndex', Date.now());
