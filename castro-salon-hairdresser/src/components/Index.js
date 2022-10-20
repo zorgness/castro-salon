@@ -90,10 +90,10 @@ const Index = () => {
 
         return (
 
-            <div className="index-item">
+            <div className="index-item" key={id} >
 
 
-            <div key={id} className={styleByIndex}>
+            <div className={styleByIndex}>
 
               {
                 bubble
@@ -120,7 +120,7 @@ const Index = () => {
           })
       }
 
-      <div className="index-item">
+      <div className="index-item2">
          <Brand />
       </div>
 

@@ -90,35 +90,35 @@ const Gallery = () => {
 
         <div className="index-item">
 
-        <h1 className='pattaya text-center m-3' style={{fontSize: "48px"}}>Gallerie</h1>
+        <h1 className='pattaya text-center m-3' style={{fontSize: "48px", textDecoration: " black  underline"}}>Gallerie</h1>
 
         <div className="d-flex justify-content-around flex-wrap">
 
         {
 
-        infos?.['hydra:member']?.map(({id, title} , index )=> {
+            infos?.['hydra:member']?.map(({id, title} , index )=> {
 
-           return (
-            <Link to={`/gallerie/${id}`} key={id} >
-
-
-                <div className='m-5'>
-                  <h2 className='pattaya text-secondary text-end' style={{fontSize: "24px"}}>{title}</h2>
-                  {sortedImages[index] !== undefined && <img src={imagePath + sortedImages[index]?.name} alt={sortedImages[index]?.name} className="avatar-super-large" />}
-                </div>
+              return (
+                <Link to={`/gallerie/${id}`} key={id} >
 
 
-                {/* {sortedImages[index] !== undefined &&     <div className="card-category" style={{ backgroundImage: `url(${imagePath + sortedImages[index]?.name})` }}>
-                    <h3>{title}</h3>
-                </div>} */}
+                    <div className='m-5'>
+                      <h2 className='pattaya text-secondary text-end' style={{fontSize: "24px"}}>{title}</h2>
+                      {sortedImages[index] !== undefined && <img src={imagePath + sortedImages[index]?.name} alt={sortedImages[index]?.name} className="avatar-super-large" />}
+                    </div>
 
 
-            </Link>
-            )
-          })
-        }
+                    {/* {sortedImages[index] !== undefined &&     <div className="card-category" style={{ backgroundImage: `url(${imagePath + sortedImages[index]?.name})` }}>
+                        <h3>{title}</h3>
+                    </div>} */}
 
-        </div>
+
+                    </Link>
+                    )
+                  })
+                }
+
+         </div>
         </div>
 
     </Fragment>

@@ -8,7 +8,7 @@ import Hamburger from '../images/hamburger.png'
 function Navigation() {
   return (
     <>
-      <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
+      <Navbar collapseOnSelect expand="lg" bg="white" variant="white" className="border border-bottom-dark">
         <Container>
           <Navbar.Brand href="/">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMuUIFk0w4Agm7EVuAws8T1CIQMvVqUxJo7A&usqp=CAU" alt="logo" className='avatar '/>
@@ -25,7 +25,7 @@ function Navigation() {
                 <Nav.Link href="/" className='mx-5'>Acceuil</Nav.Link>
                 <Nav.Link href="/gallerie" className='mx-5'>Gallerie</Nav.Link>
                 <Nav.Link href="/contact" className='mx-5'>Contact</Nav.Link>
-                <Nav.Link href="/login" className='mx-5'>Login</Nav.Link>
+                {/* <Nav.Link href="/login" className='mx-5'>Login</Nav.Link> */}
               </Nav>
             </Navbar.Collapse>
 
