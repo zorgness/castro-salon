@@ -79,10 +79,10 @@ const GalleryNewAdmin = () => {
 
   return (
 
-     <Fragment>
+     <div className='content-container'>
 
         <div className='m-3'>
-          <h1>Gallery New</h1>
+          <h1 className='pattaya text-center' style={{fontSize: '48px'}}>Gallery New</h1>
         </div>
 
         <div className='text-danger text-right'>
@@ -108,16 +108,18 @@ const GalleryNewAdmin = () => {
           <Form.Group controlId="formFileMultiple" className="mb-3">
             <Form.Label>Multiple images</Form.Label>
             <Form.Control type="file" multiple onChange={(e) => handleCompressedUpload(e)} />
-          </Form.Group>``
+          </Form.Group>
 
-          <Button style={{backgroundColor: 'hotpink', border: '1px solid hotpink'}} type="submit">
-            Submit
-          </Button>
+          <Form.Group className="text-center">
+            <Button style={{backgroundColor: 'hotpink', border: '1px solid hotpink'}}  type="submit">
+              Submit
+            </Button>
+          </Form.Group>
 
         </Form>
       </Container>
 
-    </Fragment>
+    </div>
   )
 }
 

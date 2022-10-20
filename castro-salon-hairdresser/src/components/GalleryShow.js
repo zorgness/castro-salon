@@ -79,7 +79,7 @@ const GalleryShow = () => {
   const {title, text} = infos;
 
   return (
-    <Fragment>
+    <div className='content-container'>
       <div>GalleryShow</div>
 
       <div>
@@ -98,7 +98,7 @@ const GalleryShow = () => {
           <p>{text}</p>
         </div>
 
-    </Fragment>
+    </div>
   )
 }
 

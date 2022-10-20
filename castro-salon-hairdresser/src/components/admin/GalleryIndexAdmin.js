@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button';
 import Popup from './PopUp';
 import { galleryDestroy } from './adminDestroy';
 import { deleteImageFromS3 } from "../../S3/S3";
+import { capitalizeFirstLetter } from '../../util/capitalize';
 
 const GalleryIndexAdmin = () => {
 
@@ -111,7 +112,7 @@ const GalleryIndexAdmin = () => {
   return (
     <Fragment>
 
-        <div>GalleryIndex</div>
+        <div className='pattaya text-center' style={{fontSize: '48px'}}>Index des galleries</div>
 
          {
            show &&
@@ -130,20 +131,22 @@ const GalleryIndexAdmin = () => {
 
            return (
 
-              <Fragment key={id} >
+              <Fragment key={id}  >
 
 
-                <div className='m-3'>
-                  <h2 className='border border-success rounded w-25'>{title}</h2>
-                  {sortedImages[index] !== undefined && <img src={imagePath + sortedImages[index]?.name} alt={sortedImages[index]?.name} className="avatar-large" />}
+                <div className="border border-secondary rounded m-5 p-3 bg-light">
+
+                  <div className='m-3 text-center '>
+                    <h2 className='pattaya text-secondary'>{capitalizeFirstLetter(title)}</h2>
+                    {sortedImages[index] !== undefined && <img src={imagePath + sortedImages[index]?.name} alt={sortedImages[index]?.name} className="avatar-large" />}
+                  </div>
+
+                  <div className="d-flex justify-content-around">
+                    <Link to={`/admin_gallery_edit/${id}`} key={id}><Button variant="warning">Modifier</Button></Link>
+                    <Button variant="danger" onClick={() => handleShow(id)}>Supprimer</Button>
+                  </div>
+
                 </div>
-
-                <div className="d-flex justify-content-around">
-                  <Link to={`/admin_gallery_edit/${id}`} key={id}><Button variant="info">Modifier</Button></Link>
-                  <Button variant="danger" onClick={() => handleShow(id)}>Supprimer</Button>
-                </div>
-
-
               </Fragment>
 
             )

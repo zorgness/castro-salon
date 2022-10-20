@@ -75,7 +75,7 @@ const Index = () => {
 
   return (
 
-    <div>
+    <div className='content-container '>
 
       <Banner />
 
