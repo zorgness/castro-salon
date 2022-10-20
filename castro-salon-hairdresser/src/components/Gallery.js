@@ -84,7 +84,7 @@ const Gallery = () => {
   const sortedImages = nameImages?.sort((a,b)=> parseInt(a?.post.replace(/[^0-9]/g, "")) - parseInt(b?.post.replace(/[^0-9]/g, "")));
 
   return (
-    <Fragment className='content-container'>
+    <div className='content-container'>
 
       <Banner />
 
@@ -121,7 +121,7 @@ const Gallery = () => {
          </div>
         </div>
 
-    </Fragment>
+    </div>
 
   )
 

@@ -1,7 +1,8 @@
-import React, {useState, useEffect, Fragment} from 'react'
+import React, {useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom'
 import { fetchData } from '../Api/FecthData';
 import { checkDataAgeToCleanLocaleStorage } from '../cleanStorage/CleanStorage'
+import { capitalizeFirstLetter } from '../util/capitalize'
 
 const GalleryShow = () => {
 
@@ -79,24 +80,28 @@ const GalleryShow = () => {
   const {title, text} = infos;
 
   return (
-    <div className='content-container'>
-      <div>GalleryShow</div>
+    <div className='content-container index-item'>
 
-      <div>
+      <h1 className="pattaya text-center m-5 text-decoration-underline" style={{fontSize: '48px'}}>
+        {capitalizeFirstLetter(title ?? '')}
+      </h1>
+
+      <div className='item-show-container' >
           {
-            nameImages?.map(({id, name}) => {
+            nameImages?.map(({id, name}, index) => {
               return (
 
-                <img key={id} src={imagePath + name} alt={name} className="m-2 w-25"  />
+                <div className={`item-show-item${index + 1}`}><img key={id} src={imagePath + name} alt={name}  /></div>
               )
             })
           }
       </div>
 
-        <div className='m-3'>
-          <h2 className='text-center'>{title}</h2>
-          <p>{text}</p>
-        </div>
+      <div className='item-show-text'>
+        <p>{text}</p>
+      </div>
+
+
 
     </div>
   )
