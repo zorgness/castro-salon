@@ -41,7 +41,7 @@ const Gallery = () => {
 
       console.log('api')
 
-      const fetchedData = await fetchData(urlBlogPosts );
+      const fetchedData = await fetchData(urlBlogPosts);
       setInfos(fetchedData);
 
 

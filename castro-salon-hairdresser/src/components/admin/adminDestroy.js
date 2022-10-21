@@ -4,7 +4,6 @@ import { fetchDataWithMethod } from "../../Api/FetchDataWithMethod";
 const urlMain = process.env.REACT_APP_URL_MAIN
 
 
-
 export const galleryDestroy = async (idBlogPost) => {
 
   const urlBlogPosts = `${urlMain}/api/blog_posts/${idBlogPost}`;
