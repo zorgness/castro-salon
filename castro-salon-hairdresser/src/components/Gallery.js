@@ -7,6 +7,8 @@ import { checkDataAgeToCleanLocaleStorage } from '../cleanStorage/CleanStorage'
 
 const Gallery = () => {
 
+  const urlMain = process.env.REACT_APP_URL_MAIN
+  const urlBlogPosts = `${urlMain}/api/blog_posts`
   const imagePath = process.env.REACT_APP_AWS_S3_URL;
 
   const [infos ,setInfos] = useState([]);
@@ -39,7 +41,7 @@ const Gallery = () => {
 
       console.log('api')
 
-      const fetchedData = await fetchData('http://127.0.0.1:8000/api/blog_posts');
+      const fetchedData = await fetchData(urlBlogPosts );
       setInfos(fetchedData);
 
 
@@ -47,7 +49,7 @@ const Gallery = () => {
 
       fetchedData["hydra:member"].forEach(element => {
 
-          const filesName = fetchData('http://localhost:8000' + element.productImages[0]);
+          const filesName = fetchData(urlMain + element.productImages[0]);
 
           filesName.then(data => {
 

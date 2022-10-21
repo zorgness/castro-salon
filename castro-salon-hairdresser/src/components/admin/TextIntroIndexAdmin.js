@@ -9,6 +9,8 @@ import { textIntroDestroy } from './adminDestroy';
 
 const TextIntroIndex = () => {
 
+  const urlMain = process.env.REACT_APP_URL_MAIN
+  const urlTextIntros = `${urlMain}/api/text_intros`
   const imagePath = process.env.REACT_APP_AWS_S3_URL;
 
   const navigate = useNavigate();
@@ -46,7 +48,7 @@ const TextIntroIndex = () => {
 
     } else {
 
-      const fetchedData = await fetchData('http://127.0.0.1:8000/api/text_intros');
+      const fetchedData = await fetchData(urlTextIntros);
 
       setInfos(fetchedData);
 
@@ -54,7 +56,7 @@ const TextIntroIndex = () => {
 
       fetchedData["hydra:member"].forEach(element => {
 
-          const filesName = fetchData('http://localhost:8000' + element.image);
+          const filesName = fetchData(urlMain + element.image);
 
           filesName.then(data => {
 
@@ -88,7 +90,7 @@ const TextIntroIndex = () => {
    textIntroDestroy(id);
    handleClose();
    const toDeleteFromS3 = infos['hydra:member'].filter(member => member.id === id);
-   const fileName = fetchData('http://localhost:8000' + toDeleteFromS3[0].image)
+   const fileName = fetchData(urlMain + toDeleteFromS3[0].image)
    fileName.then(data => {
     deleteImageFromS3(data.name);
    })

@@ -1,10 +1,13 @@
 
 import { fetchDataWithMethod } from "../../Api/FetchDataWithMethod";
 
+const urlMain = process.env.REACT_APP_URL_MAIN
+
+
 
 export const galleryDestroy = async (idBlogPost) => {
 
-  const urlBlogPosts = `http://127.0.0.1:8000/api/blog_posts/${idBlogPost}`;
+  const urlBlogPosts = `${urlMain}/api/blog_posts/${idBlogPost}`;
 
   const options = {};
 
@@ -15,7 +18,7 @@ export const galleryDestroy = async (idBlogPost) => {
 
 export const textIntroDestroy = async (idTextIntro) => {
 
-  const urlBlogPosts = `http://127.0.0.1:8000/api/text_intros/${idTextIntro}`;
+  const urlBlogPosts = `${urlMain}/api/text_intros/${idTextIntro}`;
 
   const options = {};
 

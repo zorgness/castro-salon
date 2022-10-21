@@ -12,6 +12,10 @@ import { capitalizeFirstLetter } from '../../util/capitalize';
 const GalleryIndexAdmin = () => {
 
   const imagePath = process.env.REACT_APP_AWS_S3_URL;
+
+  const urlMain = process.env.REACT_APP_URL_MAIN
+  const urlBlogPosts = `${urlMain}/api/blog_posts`
+
   const navigate = useNavigate()
 
   const [infos ,setInfos] = useState([]);
@@ -45,14 +49,14 @@ const GalleryIndexAdmin = () => {
     } else {
 
       console.log('api')
-      const fetchedData = await fetchData('http://127.0.0.1:8000/api/blog_posts');
+      const fetchedData = await fetchData(urlBlogPosts);
       setInfos(fetchedData);
 
       const tmpImageStorage = [];
 
       fetchedData["hydra:member"]?.forEach(element => {
 
-          const filesName = fetchData('http://localhost:8000' + element.productImages[0]);
+          const filesName = fetchData(urlMain + element.productImages[0]);
 
           filesName.then(data => {
             tmpImageStorage.push(data);
@@ -96,7 +100,7 @@ const GalleryIndexAdmin = () => {
 
     for(let i = 0; i < toDeleteFromS3[0].productImages.length; i++) {
 
-      const filesName = fetchData('http://localhost:8000' + toDeleteFromS3[0].productImages[i])
+      const filesName = fetchData( urlMain + toDeleteFromS3[0].productImages[i])
 
       filesName.then(data => {
         deleteImageFromS3(data.name)

@@ -6,13 +6,17 @@ import MyVerticallyCenteredModal from './Modal';
 
 const Login = () => {
 
+
+  const urlMain = process.env.REACT_APP_URL_MAIN
+  const userUrl = `${urlMain}/api/login`
+
   const [user, setUser] = useState({});
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [modalShow, setModalShow] = useState(false);
 
-  const userUrl = 'http://127.0.0.1:8000/api/login'
+
 
   const handleSubmit = (e) => {
     e.preventDefault();

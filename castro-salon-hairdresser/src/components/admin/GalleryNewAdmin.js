@@ -17,8 +17,9 @@ const GalleryNewAdmin = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const urlBlogPosts = 'http://127.0.0.1:8000/api/blog_posts';
-  const urlProductImage = 'http://127.0.0.1:8000/api/product_images';
+  const urlMain = process.env.REACT_APP_URL_MAIN
+  const urlBlogPosts = `${urlMain}/api/blog_posts`
+  const urlProductImage = `${urlMain}/api/product_images`;
 
 
   const handleTitle = (e) => {

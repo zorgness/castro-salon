@@ -7,6 +7,8 @@ import { capitalizeFirstLetter } from '../util/capitalize';
 
 const Index = () => {
 
+  const urlMain = process.env.REACT_APP_URL_MAIN
+  const urlTextIntro = `${urlMain}/api/text_intros`
   const imagePath = process.env.REACT_APP_AWS_S3_URL;
 
   const [infos ,setInfos] = useState([]);
@@ -40,7 +42,7 @@ const Index = () => {
 
     } else {
 
-      const fetchedData = await fetchData('http://127.0.0.1:8000/api/text_intros');
+      const fetchedData = await fetchData(urlTextIntro);
 
       setInfos(fetchedData);
 
@@ -48,7 +50,7 @@ const Index = () => {
 
       fetchedData["hydra:member"].forEach(element => {
 
-          const filesName = fetchData('http://localhost:8000' + element.image);
+          const filesName = fetchData( urlMain+ element.image);
 
           filesName.then(data => {
 

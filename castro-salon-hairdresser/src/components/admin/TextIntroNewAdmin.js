@@ -10,6 +10,8 @@ import Compressor from 'compressorjs';
 
 const TextIntroNewAdmin = () => {
 
+  const urlMain = process.env.REACT_APP_URL_MAIN
+
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -17,8 +19,8 @@ const TextIntroNewAdmin = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const urlTextIntros = 'http://127.0.0.1:8000/api/text_intros';
-  const urlCoverImage = 'http://127.0.0.1:8000/api/cover_images';
+  const urlTextIntros = `${urlMain}api/text_intros`;
+  const urlCoverImage = `${urlMain}/api/cover_images`;
 
 
   const handleTitle = (e) => {
@@ -53,19 +55,17 @@ const TextIntroNewAdmin = () => {
 
 }
 
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (selectedFiles.length > 5) {
-        setError('5 images maximum')
+    if (selectedFiles.length > 1) {
+        setError('1 image maximum')
         return
     }
 
     if(title !== '' && text !== '') {
       uploadImageBlob(selectedFiles);
       const fetchedData = await fetchDataWithMethod(urlCoverImage, 'POST', { name: transformFileName(selectedFiles)})
-      console.log(fetchedData)
+
       const options = {title: title, text: text, image: fetchedData['@id']};
       const postTextIntro = await fetchDataWithMethod(urlTextIntros, 'POST', options);
 

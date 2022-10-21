@@ -26,10 +26,8 @@ const GalleryEditAdmin = () => {
   const [load, setLoad] = useState(true);
   const [error, setError] = useState('');
 
-  const urlBlogPosts = `http://127.0.0.1:8000/api/blog_posts/${params.id}`;
-  const urlMain= process.env.REACT_APP_URL_MAIN;
-  // const urlProductImage = 'http://127.0.0.1:8000/api/product_images';
-
+  const urlMain = process.env.REACT_APP_URL_MAIN;
+  const urlBlogPosts = `${urlMain}/api/blog_posts/${params.id}`;
 
   useEffect(() => {
 

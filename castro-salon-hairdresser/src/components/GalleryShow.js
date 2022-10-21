@@ -8,8 +8,9 @@ const GalleryShow = () => {
 
   const params = useParams()
 
+  const urlMain = process.env.REACT_APP_URL_MAIN
   const imagePath = process.env.REACT_APP_AWS_S3_URL;
-  const urlBlogPosts = `http://127.0.0.1:8000/api/blog_posts/${params.id}`;
+  const urlBlogPosts = `${urlMain }/api/blog_posts/${params.id ?? ''}`;
 
   const [infos ,setInfos] = useState([]);
   const [nameImages, setNameImages] = useState([]);
@@ -48,7 +49,7 @@ const GalleryShow = () => {
 
       fetchedData?.productImages?.forEach(element => {
 
-          const filesName = fetchData('http://localhost:8000' + element);
+          const filesName = fetchData(urlMain + element);
 
           filesName.then(data => {
             tmpImageStorage.push(data);
@@ -73,7 +74,7 @@ const GalleryShow = () => {
       }
     }
 
-  }, [infos, load, params.id, urlBlogPosts]);;
+  }, [infos, load, params.id, urlBlogPosts, urlMain]);;
 
 
 

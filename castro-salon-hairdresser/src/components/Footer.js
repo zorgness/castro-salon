@@ -1,8 +1,8 @@
 import React from "react";
 import Insta from '../images/insta.png'
-import { Link } from "react-router-dom";
 
-const instagram = 'https://www.instagram.com/anais.d.c/?hl=fr';
+
+const instagram = process.env.REACT_APP_INSTAGRAM_URL
 
 
 const Footer = () => (
