@@ -110,9 +110,9 @@ const GalleryIndexAdmin = () => {
 
 
   return (
-    <Fragment>
+    <div className='index-item'>
 
-        <div className='pattaya text-center' style={{fontSize: '48px'}}>Index des galleries</div>
+        <div className='pattaya text-center text-decoration-underline' style={{fontSize: '48px'}}>Gallery Index</div>
 
          {
            show &&
@@ -137,12 +137,12 @@ const GalleryIndexAdmin = () => {
                 <div className="border border-secondary rounded m-5 p-3 bg-light">
 
                   <div className='m-3 text-center '>
-                    <h2 className='pattaya text-secondary'>{capitalizeFirstLetter(title)}</h2>
+                    <h2 className='pattaya text-secondary'>{capitalizeFirstLetter(title ?? '')}</h2>
                     {sortedImages[index] !== undefined && <img src={imagePath + sortedImages[index]?.name} alt={sortedImages[index]?.name} className="avatar-large" />}
                   </div>
 
                   <div className="d-flex justify-content-around">
-                    <Link to={`/admin_gallery_edit/${id}`} key={id}><Button variant="warning">Modifier</Button></Link>
+                    <Link to={`/admin_gallery_edit/${id}`} key={id}><Button variant="secondary">Modifier</Button></Link>
                     <Button variant="danger" onClick={() => handleShow(id)}>Supprimer</Button>
                   </div>
 
@@ -153,7 +153,7 @@ const GalleryIndexAdmin = () => {
           })
         }
 
-    </Fragment>
+    </div>
 
   )
 }

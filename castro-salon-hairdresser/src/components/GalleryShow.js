@@ -79,27 +79,44 @@ const GalleryShow = () => {
 
   const {title, text} = infos;
 
+  console.log(nameImages.length)
+
   return (
     <div className='content-container index-item'>
 
-      <h1 className="pattaya text-center m-5 text-decoration-underline" style={{fontSize: '48px'}}>
+      <div className="bubble3"></div>
+
+      <h1 className="pattaya text-center m-5 text-decoration-underline" style={{fontSize: '48px', position: 'relative'}}>
         {capitalizeFirstLetter(title ?? '')}
       </h1>
 
+
+
       <div className='item-show-container' >
+
           {
             nameImages?.map(({id, name}, index) => {
               return (
 
-                <div className={`item-show-item${index + 1}`}><img key={id} src={imagePath + name} alt={name}  /></div>
+                <div className={`item-show-item${index + 1} show-item`} key={id}><img src={imagePath + name} alt={name} width={240} height={'auto'} className="rounded "   /></div>
               )
             })
           }
+          <div className='item-show-container'>
+
+            <div className="bubble2"></div>
+
+            <div className="show-item"><p style={{minWidth: '240px'}}>{text}</p></div>
+
+            <div className="show-item"><img src={imagePath + nameImages?.[nameImages.length - 1]?.name} alt={""} width={240} height={'auto'} className="rounded"  /></div>
+
+          </div>
+
+
+
       </div>
 
-      <div className='item-show-text'>
-        <p>{text}</p>
-      </div>
+
 
 
 

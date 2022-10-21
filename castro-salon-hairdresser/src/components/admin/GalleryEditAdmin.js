@@ -9,6 +9,7 @@ import Butterfly from '../../images/butterfly.png'
 import { fetchDataWithMethod } from '../../Api/FetchDataWithMethod'
 import { uploadImageFile, deleteImageFromS3, transformFileName  } from '../../../src/S3/S3'
 import Compressor from 'compressorjs';
+import {capitalizeFirstLetter} from '../../util/capitalize'
 
 const GalleryEditAdmin = () => {
   const params = useParams()
@@ -125,7 +126,7 @@ const GalleryEditAdmin = () => {
 
  const handleSubmit = async (e) => {
   e.preventDefault();
-  if (selectedFiles.length > 5) {
+  if (selectedFiles.length > 3) {
       setError('5 images maximum')
       return
   }
@@ -178,10 +179,12 @@ const GalleryEditAdmin = () => {
 
 
   return (
-    <Fragment>
+
+    <div className='index-item'>
 
 
-      <div>
+      <h1 className='pattaya text-center text-decoration-underline m-3' style={{fontSize: '48px'}}>Gallery Edition</h1>
+      <div className='text-center'>
           {
             nameImages.map(({id, name}) => {
               return (
@@ -193,18 +196,17 @@ const GalleryEditAdmin = () => {
       </div>
 
         <div className='m-3'>
-          <h2 className='text-center'>{title}</h2>
-          <p>{text}</p>
+          <h2 className='pattaya text-center text-secondary'>{capitalizeFirstLetter(title ?? '')}</h2>
+
+          <div className="d-flex justify-content-center mt-4">
+              <p style={{maxWidth: "440px"}} className="text-start">{text}</p>
+          </div>
         </div>
 
 
         <br/>
 
         <Fragment>
-
-          <div className='m-3'>
-            <h1>Gallery Edition</h1>
-          </div>
 
           <div className='text-danger text-right'>
             <p>{ error }</p>
@@ -229,11 +231,13 @@ const GalleryEditAdmin = () => {
             <Form.Group controlId="formFileMultiple" className="mb-3">
               <Form.Label>Multiple images</Form.Label>
               <Form.Control type="file" multiple onChange={(e) => handleCompressedUpload(e)} />
-            </Form.Group>``
+            </Form.Group>
 
+            <Form.Group className='text-center'>
             <Button style={{backgroundColor: 'hotpink', border: '1px solid hotpink'}} type="submit">
               Submit
             </Button>
+            </Form.Group>
 
           </Form>
           </Container>
@@ -242,7 +246,7 @@ const GalleryEditAdmin = () => {
 
 
 
-    </Fragment>
+    </div>
   )
 }
 

@@ -98,12 +98,12 @@ body p {
 .bubble3 {
   position: absolute;
   background-color: lavender;
-  opacity: 0.5;
-  height: 88px;
-  width: 88px;
+  opacity: 0.6;
+  height: 62px;
+  width: 62px;
   border-radius: 50%;
-  left: 200px;
-  margin-top: 60px
+  margin-left: 10vh;
+  margin-top: 20px;
 }
 
 .index-item {
@@ -284,17 +284,12 @@ a {
     width: 100%;
   }
 
-  .bubble3 {
+  /* .bubble3 {
     left: 44px;
     margin-bottom: 80px;
-  }
+  } */
 }
 
-@media screen and (max-width: 1100px) {
-  .bubble3 {
-    left: 60px;
-  }
-}
 
 @media screen and (min-width: 900px) {
 
@@ -312,18 +307,21 @@ a {
   .bubble2 {
     right: 140px;
   }
+
+  .bubble3 {
+    margin-left: 600px;
+  }
 }
 
 .item-show-container {
+  left: auto;
+  right: auto;
   display: flex;
-  justify-content: space-between;
-
+  justify-content: space-around;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
-.item-show-item {
-  background-color: red;
-}
 
 section {
 	width: 80%;
@@ -352,4 +350,24 @@ section div {
 }
 section div:nth-of-type(2) {
 	grid-column: 2 / 4;
+}
+
+.item-show-item3 {
+  display: none;
+}
+
+/* .item-show-item4 img {
+  display: none;
+}
+
+.item-show-item4 {
+  display: none;
+} */
+
+.item-show-item3 img {
+  display: none;
+}
+
+.show-item {
+  flex: 0
 }

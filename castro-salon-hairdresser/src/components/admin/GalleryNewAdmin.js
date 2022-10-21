@@ -53,31 +53,17 @@ const GalleryNewAdmin = () => {
   }
 }
 
-
-    // to put in another file
-    const dataURLtoFile  = (dataurl, filename) =>  {
-
-      let arr = dataurl.split(','),
-          mime = arr[0].match(/:(.*?);/)[1],
-          bstr = atob(arr[1]),
-          n = bstr.length,
-          u8arr = new Uint8Array(n);
-
-      while(n--){
-          u8arr[n] = bstr.charCodeAt(n);
-      }
-
-      return new File([u8arr], filename, {type:mime});
-    }
-
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (selectedFiles.length > 5) {
+    if (selectedFiles.length > 3) {
         setError('5 images maximum')
         return
     }
+
+    if (selectedFiles.length < 3) {
+      setError('not enough images')
+      return
+  }
 
     if(title !== '' && text !== '') {
       const options = {title: title, text: text};
@@ -98,13 +84,13 @@ const GalleryNewAdmin = () => {
 
   return (
 
-     <div className='content-container'>
+     <div className='content-container index-item'>
 
         <div className='m-3'>
-          <h1 className='pattaya text-center' style={{fontSize: '48px'}}>Gallery New</h1>
+          <h1 className='pattaya text-center text-decoration-underline' style={{fontSize: '48px'}}>Gallery New</h1>
         </div>
 
-        <img id="preview" alt="prev"></img>
+
 
         <div className='text-danger text-right'>
           <p>{ error }</p>
