@@ -84,7 +84,7 @@ const GalleryShow = () => {
   return (
     <div className='content-container index-item'>
 
-      <div className="bubble3"></div>
+      <div className="bubble3" style={{backgroundColor: 'lavender'}}></div>
 
       <h1 className="pattaya text-center m-5 text-decoration-underline" style={{fontSize: '48px', position: 'relative'}}>
         {capitalizeFirstLetter(title ?? '')}

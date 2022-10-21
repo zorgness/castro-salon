@@ -2,16 +2,11 @@ import React from 'react'
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import Banner2 from './Banner2';
+
 
 const Contact = () => {
   return (
     <div >
-
-    <div className='img-fluid'>
-        <Banner2  />
-    </div>
-
 
     <h1 className='pattaya text-center m-3' style={{fontSize: "48px", textDecoration: " black  underline"}}>Contactez-moi</h1>
 

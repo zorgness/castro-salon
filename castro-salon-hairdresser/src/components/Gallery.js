@@ -104,7 +104,7 @@ const Gallery = () => {
 
                     <div className='m-5'>
                       <h2 className='pattaya text-secondary text-end' style={{fontSize: "24px"}}>{title}</h2>
-                      {sortedImages[index] !== undefined && <img src={imagePath + sortedImages[index]?.name} alt={sortedImages[index]?.name} className="avatar-super-large"  width={100} height={'auto'} />}
+                      {sortedImages[index] !== undefined && <img src={imagePath + sortedImages[index]?.name} alt={sortedImages[index]?.name} className="avatar-super-large"  />}
                     </div>
 
 
