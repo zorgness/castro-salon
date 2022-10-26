@@ -42,7 +42,7 @@ security:
 
     access_control:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
-        - { path: ^/castro/dashboard,       roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/dashboard,       roles: IS_AUTHENTICATED_FULLY }
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 
