@@ -7,7 +7,7 @@ use App\Repository\MessageRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ApiResource()]
+#[ApiResource(order: ['created_at' => 'DESC'])]
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 class Message
 {
