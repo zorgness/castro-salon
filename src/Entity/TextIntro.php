@@ -22,6 +22,7 @@ class TextIntro
     private ?string $text = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+
     private ?CoverImage $image = null;
 
     public function getId(): ?int
